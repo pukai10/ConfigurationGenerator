@@ -1,4 +1,12 @@
 # 文件夹
+.vs/
+**/bin/
+**/obj/
 
 # 文件
 .DS_Store
+**.user
+**.sln
+**.vcxproj
+**.filters
+**.csproj
