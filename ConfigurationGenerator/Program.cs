@@ -1,5 +1,6 @@
 ﻿using System;
 using CommandLineOption;
+using AurogonTools;
 
 namespace ConfigurationGenerator
 {
@@ -17,8 +18,19 @@ namespace ConfigurationGenerator
             };
 
             CommandLineParser.Default.Parse<Setting>(args);
-
+            TestLogger();
             Console.ReadKey();
+        }
+
+        private static void TestLogger()
+        {
+            ILogger logger = Logger.GetLogger("Main");
+            logger.loggerSetting = new LoggerSetting() { logType = LogType.All };
+            logger.Debug("Debug Log");
+            logger.Info("Info Log");
+            logger.Warning("Warning Log");
+            logger.Error("Error Log");
+            logger.Fatal("Fatal Log");
         }
     }
 
