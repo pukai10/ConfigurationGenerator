@@ -9,6 +9,7 @@ project "AurogonTools"
     targetdir "AurogonTools/bin/%{cfg.buildcfg}"
 
     files {"AurogonTools/**.cs"}
+    removefiles { "**/obj/**","**/bin/**"}
     
     configurations {"NoConsoleDebug","NoConsoleRelease"}
 
@@ -35,6 +36,7 @@ project "CommandLineOption"
     targetdir "CommandLineOption/bin/%{cfg.buildcfg}"
 
     files {"CommandLineOption/**.cs"}
+    removefiles { "**/obj/**","**/bin/**"}
 
     filter{ "configurations:Debug"}
         defines {"DEBUG","CONSOLE_LOG"}
@@ -58,7 +60,9 @@ project "ConfigurationGenerator"
     language "C#"
     targetdir "ConfigurationGenerator/bin/%{cfg.buildcfg}"
     links {"CommandLineOption","AurogonTools"}
+
     files {"ConfigurationGenerator/**.cs"}
+    removefiles { "**/obj/**","**/bin/**"}
 
     filter{ "configurations:Debug"}
         defines {"DEBUG","CONSOLE_LOG"}
@@ -75,3 +79,4 @@ project "ConfigurationGenerator"
     filter {"configurations:NoConsoleDebug"}
         defines {"NDEBUG"}
         optimize "On"
+
