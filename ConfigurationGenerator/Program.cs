@@ -17,9 +17,8 @@ namespace ConfigurationGenerator
                 "--batchmode"
             };
 
-            //CommandLineParser.Default.Parse<Setting>(args);
+            CommandLineParser.Default.Parse<Setting>(args);
 
-            typeof(Setting).GetOptions();
            // TestLogger();
             Console.ReadKey();
         }
@@ -48,24 +47,27 @@ namespace ConfigurationGenerator
         }
     }
 
-    [Command("export", "export excels")]
     public class Setting: BaseSetting
     {
-        [Option("p", "path", describte: "设置路径", required: true)]
+        [Option("p", "path", helpText = "设置路径", required = true)]
         public string Path { get; set; }
 
-        [Option("b", "batchmode", describte: "batch mode start", required: false)]
+        [Option("b", "batchmode", helpText = "batch mode start", required = false)]
         public bool IsBatchMode { get; set; }
+
+        public int test1 { get; set; }
     }
 
 
-    public class BaseSetting:IDisposable
+    public class BaseSetting
     {
-        [Option("p", "path", describte: "设置路径", required: true)]
+        [Option("p", "path", helpText = "设置路径", required = true)]
         public string Name { get; set; }
 
-        [Option("b", "batchmode", describte: "batch mode start", required: false)]
+        [Option("b", "batchmode", helpText = "batch mode start", required = false)]
         public bool IsEnabed { get; set; }
+
+        public string test2 { get; set; }
 
         public void Dispose()
         {

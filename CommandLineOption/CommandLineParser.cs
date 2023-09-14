@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CommandLineOption
 {
@@ -26,19 +27,18 @@ namespace CommandLineOption
 
             Type type = typeof(T);
 
-            ParserResult parserResult = new ParserResult();
-            //parserResult.options = new List<Option>();
-            //var properties = type.GetProperties();
-            //foreach (var property in properties)
-            //{
-            //    var option = property.GetCustomAttribute<Option>();
-            //    if(option != null)
-            //    {
-            //        Console.WriteLine(option.ToString());
-            //        option.propertyInfo = property;
-            //        parserResult.options.Add(option);
-            //    }
-            //}
+            T t = Activator.CreateInstance<T>();
+
+            var optProperties = from p in type.GetProperties()
+                          let attrs = p.GetCustomAttributes()
+                          where attrs.OfType<OptionAttribute>().Any()
+                          select p;
+
+            foreach (var property in optProperties)
+            {
+                Console.WriteLine(property.Name);
+            }
+
 
             for (int argIndex = 0; argIndex < args.Length; argIndex++)
             {
@@ -75,7 +75,4 @@ namespace CommandLineOption
         }
     }
 
-    public class ParserResult
-    {
-    }
 }

@@ -2,6 +2,15 @@
 workspace "ConfigurationGenerator"
     configurations { "Debug","Release","NoConsoleDebug","NoConsoleRelease"}
 
+project "AurogonExtenstion"
+    location "AurogonExtenstion"
+    language "C#"
+    kind "SharedLib"
+    targetdir "AurogonExtenstion/bin/%{cfg.buildcfg}"
+
+    files {"AurogonExtenstion/**.cs"}
+    removefiles { "**/obj/**","**/bin/**"}
+
 project "AurogonTools"
     location "AurogonTools"
     language "C#"
@@ -34,6 +43,8 @@ project "CommandLineOption"
     language "C#"
     kind "SharedLib"
     targetdir "CommandLineOption/bin/%{cfg.buildcfg}"
+
+    links {"AurogonExtenstion"}
 
     files {"CommandLineOption/**.cs"}
     removefiles { "**/obj/**","**/bin/**"}
