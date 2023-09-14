@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CommandLineOption;
 using AurogonTools;
 
@@ -24,13 +24,17 @@ namespace ConfigurationGenerator
 
         private static void TestLogger()
         {
-            ILogger logger = Logger.GetLogger("Main");
-            logger.loggerSetting = new LoggerSetting() { logType = LogType.All };
-            logger.Debug("Debug Log");
-            logger.Info("Info Log");
-            logger.Warning("Warning Log");
-            logger.Error("Error Log");
-            logger.Fatal("Fatal Log");
+            ILogger logger = Logger.GetLogger("Main", new LoggerSetting() { logType = LogType.All });
+            int index = 0;
+            for (int i = 0; i < 10000; i++)
+            {
+                logger.Debug($"Debug Log:{index}");
+                logger.Info($"Info Log:{index}");
+                logger.Warning($"Warning Log:{index}");
+                logger.Error($"Error Log:{index}");
+                logger.Fatal($"Fatal Log:{index}");
+                index++;
+            }
         }
     }
 
