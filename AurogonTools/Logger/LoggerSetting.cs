@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace AurogonTools
 {
     public class LoggerSetting
@@ -9,7 +9,8 @@ namespace AurogonTools
 
         public LoggerSetting()
         {
-
+            logType = LogType.All;
+            logPath = AppDomain.CurrentDomain.BaseDirectory;
         }
     }
 }
