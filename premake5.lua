@@ -9,6 +9,7 @@ project "AurogonTools"
     targetdir "AurogonTools/bin/%{cfg.buildcfg}"
 
     files {"AurogonTools/**.cs"}
+    
     configurations {"NoConsoleDebug","NoConsoleRelease"}
 
     filter{ "configurations:NoConsoleDebug"}

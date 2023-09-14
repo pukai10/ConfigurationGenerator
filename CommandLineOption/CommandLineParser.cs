@@ -27,24 +27,18 @@ namespace CommandLineOption
             Type type = typeof(T);
 
             ParserResult parserResult = new ParserResult();
-            parserResult.command = type.GetCustomAttribute<Command>();
-            parserResult.options = new List<Option>();
-            var properties = type.GetProperties();
-            foreach (var property in properties)
-            {
-                var option = property.GetCustomAttribute<Option>();
-                if(option != null)
-                {
-                    Console.WriteLine(option.ToString());
-                    option.propertyInfo = property;
-                    parserResult.options.Add(option);
-                }
-            }
-
-            if(parserResult.command != null)
-            {
-
-            }
+            //parserResult.options = new List<Option>();
+            //var properties = type.GetProperties();
+            //foreach (var property in properties)
+            //{
+            //    var option = property.GetCustomAttribute<Option>();
+            //    if(option != null)
+            //    {
+            //        Console.WriteLine(option.ToString());
+            //        option.propertyInfo = property;
+            //        parserResult.options.Add(option);
+            //    }
+            //}
 
             for (int argIndex = 0; argIndex < args.Length; argIndex++)
             {
@@ -53,7 +47,6 @@ namespace CommandLineOption
                 {
                     continue;
                 }
-
 
                 if(arg.Substring(0,1) != "-")
                 {
@@ -65,22 +58,24 @@ namespace CommandLineOption
                     throw new Exception($"arg length less 2,please check {argIndex}:{arg}");
                 }
 
-                if (arg.Substring(0,2) == "--")
-                {
+                Token token = arg.StartsWith("-", StringComparison.Ordinal) ? ((!arg.StartsWith("--", StringComparison.Ordinal) ? ParseShortName() : ParseLongName())) : Token.Value(arg);
 
-                }
-                else
-                {
 
-                }
             }
+        }
+
+        private Token ParseShortName()
+        {
+            return Token.Value("");
+        }
+
+        private Token ParseLongName()
+        {
+            return Token.Value("");
         }
     }
 
     public class ParserResult
     {
-        public Command command;
-        public List<Option> options;
-
     }
 }

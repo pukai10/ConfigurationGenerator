@@ -6,8 +6,8 @@ namespace CommandLineOption
     /// <summary>
     /// 命令参数特性
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property,AllowMultiple =false,Inherited = false)]
-    public class Option:Attribute
+    [AttributeUsage(AttributeTargets.Property,AllowMultiple =false,Inherited = true)]
+    public class OptionAttribute : Attribute
     {
         private string name;
         /// <summary>
@@ -34,9 +34,7 @@ namespace CommandLineOption
         public bool Required => required;
 
 
-        public PropertyInfo propertyInfo;
-
-        public Option(string alias,string name,string describte = "",bool required = false)
+        public OptionAttribute(string alias,string name,string describte = "",bool required = false)
         {
             this.alias = alias;
             this.name = name;
@@ -49,4 +47,5 @@ namespace CommandLineOption
             return $"-{alias} --{Name} {Describte} {Required}";
         }
     }
+
 }
