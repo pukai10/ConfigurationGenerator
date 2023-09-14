@@ -74,11 +74,11 @@ namespace AurogonTools
 
         #endregion
 
-        public Logger():this(string.Empty,new LoggerSetting())
+        private Logger():this(string.Empty,new LoggerSetting())
         {
         }
 
-        public Logger(string logTag,LoggerSetting setting)
+        private Logger(string logTag,LoggerSetting setting)
         {
             m_logTag = logTag;
             loggerSetting = setting;
@@ -123,14 +123,16 @@ namespace AurogonTools
             string stackTrace = stackTracer.GetStackTrace(string.Format("{0,35}",""));
 
             content = string.Format("{0} {1,-10} {2}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), logType, content);
+#if CONSOLE_LOG
             ConsoleLog(content, logType, stackTrace);
+#endif
             WriteToFile(content, logType, stackTrace);
             if (m_logCallback != null)
             {
                 m_logCallback(content, logType, stackTrace);
             }
         }
-
+#if CONSOLE_LOG
         private void ConsoleLog(string content, LogType logType, string stackTrace)
         {
             ConsoleColor oldColor = Console.ForegroundColor;
@@ -161,13 +163,16 @@ namespace AurogonTools
                     break;
             }
 
-
             Console.ForegroundColor = oldColor;
 
         }
-
+#endif
         private void WriteToFile(string content, LogType logType, string stackTrace)
         {
+            if (!loggerSetting.logFileEnabled)
+            {
+                return;
+            }
 
             try
             {
@@ -187,7 +192,12 @@ namespace AurogonTools
 
         private void ClearAndReCreateFile()
         {
-            if(m_fileInfo.Exists)
+            if (!loggerSetting.logFileEnabled)
+            {
+                return;
+            }
+
+            if (m_fileInfo.Exists)
             {
                 m_fileInfo.Delete();
             }

@@ -1,6 +1,6 @@
 -- premake5.lua
 workspace "ConfigurationGenerator"
-    configurations { "Debug","Release"}
+    configurations { "Debug","Release","NoConsoleDebug","NoConsoleRelease"}
 
 project "AurogonTools"
     location "AurogonTools"
@@ -9,13 +9,22 @@ project "AurogonTools"
     targetdir "AurogonTools/bin/%{cfg.buildcfg}"
 
     files {"AurogonTools/**.cs"}
+    configurations {"NoConsoleDebug","NoConsoleRelease"}
 
-    filter{ "configurations:Debug"}
+    filter{ "configurations:NoConsoleDebug"}
         defines {"DEBUG"}
         symbols "On"
     
-    filter {"configurations:Release"}
+    filter {"configurations:NoConsoleDebug"}
         defines {"NDEBUG"}
+        optimize "On"
+
+    filter{ "configurations:Debug"}
+        defines {"DEBUG","CONSOLE_LOG"}
+        symbols "On"
+    
+    filter {"configurations:Release"}
+        defines {"NDEBUG","CONSOLE_LOG"}
         optimize "On"
 
 project "CommandLineOption"
@@ -27,13 +36,20 @@ project "CommandLineOption"
     files {"CommandLineOption/**.cs"}
 
     filter{ "configurations:Debug"}
-        defines {"DEBUG"}
+        defines {"DEBUG","CONSOLE_LOG"}
         symbols "On"
     
     filter {"configurations:Release"}
-        defines {"NDEBUG"}
+        defines {"NDEBUG","CONSOLE_LOG"}
         optimize "On"
 
+    filter{ "configurations:NoConsoleDebug"}
+        defines {"DEBUG"}
+        symbols "On"
+    
+    filter {"configurations:NoConsoleDebug"}
+        defines {"NDEBUG"}
+        optimize "On"
 
 project "ConfigurationGenerator"
     location "ConfigurationGenerator"
@@ -44,9 +60,17 @@ project "ConfigurationGenerator"
     files {"ConfigurationGenerator/**.cs"}
 
     filter{ "configurations:Debug"}
-        defines {"DEBUG"}
+        defines {"DEBUG","CONSOLE_LOG"}
         symbols "On"
     
     filter {"configurations:Release"}
+        defines {"NDEBUG","CONSOLE_LOG"}
+        optimize "On"
+
+    filter{ "configurations:NoConsoleDebug"}
+        defines {"DEBUG"}
+        symbols "On"
+    
+    filter {"configurations:NoConsoleDebug"}
         defines {"NDEBUG"}
         optimize "On"

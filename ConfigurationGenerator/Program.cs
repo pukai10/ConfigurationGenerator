@@ -25,8 +25,10 @@ namespace ConfigurationGenerator
         private static void TestLogger()
         {
             ILogger logger = Logger.GetLogger("Main", new LoggerSetting() { logType = LogType.All });
+            var logCallback = logger as IRegisterLogCallback;
+            logCallback.RegisterLogCallback(OnReigisterLogCallBack);
             int index = 0;
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 2; i++)
             {
                 logger.Debug($"Debug Log:{index}");
                 logger.Info($"Info Log:{index}");
@@ -35,6 +37,12 @@ namespace ConfigurationGenerator
                 logger.Fatal($"Fatal Log:{index}");
                 index++;
             }
+
+        }
+
+        private static void OnReigisterLogCallBack(string content, LogType logType, string stackTrace)
+        {
+            Console.WriteLine(content, logType, stackTrace);
         }
     }
 
