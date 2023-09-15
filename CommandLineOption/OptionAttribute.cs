@@ -26,6 +26,11 @@ namespace CommandLineOption
 
         public OptionAttribute(char shortName,string longName) : this(shortName.OneCharToString(), longName) { }
 
+        public override string ToString()
+        {
+            return $"shortName:{shortName} longName:{longName} {base.ToString()}";
+        }
+
     }
 
 
@@ -49,6 +54,11 @@ namespace CommandLineOption
         {
             m_required = false;
             m_helpText = string.Empty;
+        }
+
+        public override string ToString()
+        {
+            return $" required:{required} helpText:{helpText}";
         }
     }
 

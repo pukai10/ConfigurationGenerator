@@ -10,12 +10,6 @@ namespace ConfigurationGenerator
         {
             Console.WriteLine("Hello World!");
 
-            args = new string[3]
-            {
-                "-p",
-                "test\test.cs",
-                "--batchmode"
-            };
 
             CommandLineParser.Default.Parse<Setting>(args);
 
