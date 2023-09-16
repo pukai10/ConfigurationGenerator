@@ -44,7 +44,7 @@ project "CommandLineOption"
     kind "SharedLib"
     targetdir "CommandLineOption/bin/%{cfg.buildcfg}"
 
-    links {"AurogonExtenstion"}
+    links {"AurogonExtenstion","AurogonTools"}
 
     files {"CommandLineOption/**.cs"}
     removefiles { "**/obj/**","**/bin/**"}

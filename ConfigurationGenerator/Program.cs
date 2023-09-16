@@ -10,9 +10,25 @@ namespace ConfigurationGenerator
         {
             Console.WriteLine("Hello World!");
 
+            ILogger logger = Logger.GetLogger(new LoggerSetting() { logType = LogType.All });
+            args = new string[10]
+            {
+                "-",
+                "--",
+                "-abc",
+                "1.73",
+                "Aurogonpu",
+                "-p",
+                "d:/test/test.log",
+                "--name=test.log",
+                "--accept=",
+                "--accept=11=",
+            };
 
-            CommandLineParser.Default.Parse<Setting>(args);
+            Setting setting = CommandLineParser.Default.Parse<Setting>(args,true);
 
+            logger.Info(setting.ToString());
+            
            // TestLogger();
             Console.ReadKey();
         }
@@ -43,29 +59,38 @@ namespace ConfigurationGenerator
 
     public class Setting: BaseSetting
     {
-        [Option("p", "path", helpText = "设置路径", required = true)]
-        public string Path { get; set; }
+        [Option("a", "accept", helpText = "accept", required = true)]
+        public float floatValue { get; set; }
 
         [Option("b", "batchmode", helpText = "batch mode start", required = false)]
         public bool IsBatchMode { get; set; }
 
+        [Option("p", "path", helpText = "设置路径", required = true)]
+        public string Path { get; set; }
+
         public int test1 { get; set; }
+
+        public override string ToString()
+        {
+            return $"Setting ->floatValue:{floatValue} Path:{Path} IsBatchMode:{IsBatchMode} {base.ToString()}";
+        }
     }
 
 
     public class BaseSetting
     {
-        [Option("p", "path", helpText = "设置路径", required = true)]
+        [Option("m", "name", helpText = "设置路径", required = true)]
         public string Name { get; set; }
 
-        [Option("b", "batchmode", helpText = "batch mode start", required = false)]
+
+        [Option("d", "disable", helpText = "disable mode start", required = false)]
         public bool IsEnabed { get; set; }
 
         public string test2 { get; set; }
 
-        public void Dispose()
+        public override string ToString()
         {
-
+            return $"Name:{Name} IsEnabled:{IsEnabed}";
         }
     }
 }

@@ -13,11 +13,33 @@ namespace AurogonTools
         #region 静态
 
         private static Dictionary<string, ILogger> m_loggers = new Dictionary<string, ILogger>();
-        private static ILogger m_defaultLog = new Logger();
-        public static ILogger Default => m_defaultLog;
+        private static ILogger m_defaultLog = null;
+        public static ILogger Default
+        {
+            get
+            {
+                if(m_defaultLog == null)
+                {
+                    return GetLogger();
+                }
+
+                return m_defaultLog;
+            }
+        }
+
 
         public static ILogger GetLogger()
         {
+            return GetLogger(new LoggerSetting());
+        }
+
+        public static ILogger GetLogger(LoggerSetting setting)
+        {
+            if(m_defaultLog == null)
+            {
+                m_defaultLog = new Logger(setting);
+            }
+
             return m_defaultLog;
         }
 
@@ -76,6 +98,11 @@ namespace AurogonTools
 
         private Logger():this(string.Empty,new LoggerSetting())
         {
+        }
+
+        public Logger(LoggerSetting setting):this(string.Empty,setting)
+        {
+
         }
 
         private Logger(string logTag,LoggerSetting setting)
