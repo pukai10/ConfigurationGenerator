@@ -1,93 +1,126 @@
 -- premake5.lua
 workspace "ConfigurationGenerator"
-    configurations { "Debug","Release","NoConsoleDebug","NoConsoleRelease"}
+    architecture "x64"
+    configurations 
+    { 
+        "Debug",
+        "Release",
+        "NoConsoleDebug",
+        "NoConsoleRelease"
+    }
+
+    outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+    
+    filter "system:windows"
+        systemversion "latest"
+        defines
+        {
+            "SYSTEM_WINDOWS"
+        }
+
+    filter "system:macosx"
+        systemversion "latest"
+        defines
+        {
+            "SYSTEM_MACOS"
+        }
+    
+    filter{ "configurations:NoConsoleDebug"}
+        defines 
+        {
+            "DEBUG"
+        }
+        symbols "On"
+    
+    filter {"configurations:NoConsoleDebug"}
+        defines 
+        {
+            "NDEBUG"
+        }
+        optimize "On"
+
+    filter{ "configurations:Debug"}
+        defines 
+        {
+            "DEBUG",
+            "CONSOLE_LOG"
+        }
+        symbols "On"
+    
+    filter {"configurations:Release"}
+        defines 
+        {
+            "NDEBUG",
+            "CONSOLE_LOG"
+        }
+        optimize "On"
 
 project "AurogonExtenstion"
     location "AurogonExtenstion"
     language "C#"
     kind "SharedLib"
-    targetdir "AurogonExtenstion/bin/%{cfg.buildcfg}"
+    
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    files {"AurogonExtenstion/**.cs"}
-    removefiles { "**/obj/**","**/bin/**"}
+    files 
+    {
+        "AurogonExtenstion/src/**.cs"
+    }
+
 
 project "AurogonTools"
     location "AurogonTools"
     language "C#"
     kind "SharedLib"
-    targetdir "AurogonTools/bin/%{cfg.buildcfg}"
-
-    files {"AurogonTools/**.cs"}
-    removefiles { "**/obj/**","**/bin/**"}
     
-    configurations {"NoConsoleDebug","NoConsoleRelease"}
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    filter{ "configurations:NoConsoleDebug"}
-        defines {"DEBUG"}
-        symbols "On"
-    
-    filter {"configurations:NoConsoleDebug"}
-        defines {"NDEBUG"}
-        optimize "On"
-
-    filter{ "configurations:Debug"}
-        defines {"DEBUG","CONSOLE_LOG"}
-        symbols "On"
-    
-    filter {"configurations:Release"}
-        defines {"NDEBUG","CONSOLE_LOG"}
-        optimize "On"
+    files 
+    {
+        "AurogonTools/src/**.cs"
+    }
 
 project "CommandLineOption"
     location "CommandLineOption"
     language "C#"
     kind "SharedLib"
-    targetdir "CommandLineOption/bin/%{cfg.buildcfg}"
-
-    links {"AurogonExtenstion","AurogonTools"}
-
-    files {"CommandLineOption/**.cs"}
-    removefiles { "**/obj/**","**/bin/**"}
-
-    filter{ "configurations:Debug"}
-        defines {"DEBUG","CONSOLE_LOG"}
-        symbols "On"
     
-    filter {"configurations:Release"}
-        defines {"NDEBUG","CONSOLE_LOG"}
-        optimize "On"
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    filter{ "configurations:NoConsoleDebug"}
-        defines {"DEBUG"}
-        symbols "On"
-    
-    filter {"configurations:NoConsoleDebug"}
-        defines {"NDEBUG"}
-        optimize "On"
+    links 
+    {
+        "AurogonExtenstion",
+        "AurogonTools"
+    }
+
+    files 
+    {
+        "CommandLineOption/**.cs"
+    }
 
 project "ConfigurationGenerator"
     location "ConfigurationGenerator"
     kind "ConsoleApp"
     language "C#"
-    targetdir "ConfigurationGenerator/bin/%{cfg.buildcfg}"
-    links {"CommandLineOption","AurogonTools"}
-
-    files {"ConfigurationGenerator/**.cs"}
-    removefiles { "**/obj/**","**/bin/**"}
-
-    filter{ "configurations:Debug"}
-        defines {"DEBUG","CONSOLE_LOG"}
-        symbols "On"
     
-    filter {"configurations:Release"}
-        defines {"NDEBUG","CONSOLE_LOG"}
-        optimize "On"
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    filter{ "configurations:NoConsoleDebug"}
-        defines {"DEBUG"}
-        symbols "On"
-    
-    filter {"configurations:NoConsoleDebug"}
-        defines {"NDEBUG"}
-        optimize "On"
+    links 
+    {
+        "CommandLineOption",
+        "AurogonTools"
+    }
 
+    nuget 
+    {
+        "NPOI:2.6.2"
+    }
+
+    files 
+    {
+        "ConfigurationGenerator/**.cs"
+    }
