@@ -1,1 +1,1 @@
-./premake/mac/premake5 vs2019
+./premake/mac/premake5 vs2022 --os=macosx

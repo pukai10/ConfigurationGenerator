@@ -1,6 +1,5 @@
 -- premake5.lua
 workspace "ConfigurationGenerator"
-    architecture "x64"
     configurations 
     { 
         "Debug",
@@ -9,7 +8,7 @@ workspace "ConfigurationGenerator"
         "NoConsoleRelease"
     }
 
-    outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+    outputdir = "%{cfg.buildcfg}-%{cfg.system}"
     
     filter "system:windows"
         systemversion "latest"
@@ -68,7 +67,6 @@ project "AurogonExtenstion"
         "AurogonExtenstion/src/**.cs"
     }
 
-
 project "AurogonTools"
     location "AurogonTools"
     language "C#"
@@ -112,7 +110,7 @@ project "ConfigurationGenerator"
     links 
     {
         "CommandLineOption",
-        "AurogonTools"
+        "AurogonTools",
     }
 
     nuget 

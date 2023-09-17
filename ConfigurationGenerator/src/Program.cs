@@ -6,6 +6,7 @@ namespace ConfigurationGenerator
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
@@ -25,11 +26,12 @@ namespace ConfigurationGenerator
                 "--accept=11=",
             };
 
-            Setting setting = CommandLineParser.Default.Parse<Setting>(args,true);
+
+            Setting setting = CommandLineParser.Default.Parse<Setting>(args,false);
 
             logger.Info(setting.ToString());
-            
-           // TestLogger();
+
+            ExcelReader excel = new ExcelReader("/Users/aurogonpu/Projects/excel/story.xlsx");
             Console.ReadKey();
         }
 
