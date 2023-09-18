@@ -1,6 +1,7 @@
 using System;
 using CommandLineOption;
 using AurogonTools;
+using AurogonCodeGenerator;
 
 namespace ConfigurationGenerator
 {
@@ -27,11 +28,32 @@ namespace ConfigurationGenerator
             };
 
 
-            Setting setting = CommandLineParser.Default.Parse<Setting>(args,false);
+            //Setting setting = CommandLineParser.Default.Parse<Setting>(args,false);
 
-            logger.Info(setting.ToString());
+            //logger.Info(setting.ToString());
 
-            ExcelReader excel = new ExcelReader("/Users/aurogonpu/Projects/excel/story.xlsx");
+            //ExcelReader excel = new ExcelReader("/Users/aurogonpu/Projects/excel/story.xlsx");
+
+            CodeGenerator codeGenerator = new CodeGenerator("Story");
+            codeGenerator.AddNameSpace("System");
+            codeGenerator.AddInterface("IPackage");
+            codeGenerator.AddPropertyInfo("ID", typeof(uint));
+            codeGenerator.AddPropertyInfo("ID2", typeof(int));
+            codeGenerator.AddPropertyInfo("ID3", typeof(ushort));
+            codeGenerator.AddPropertyInfo("ID4", typeof(short));
+            codeGenerator.AddPropertyInfo("ID5", typeof(byte));
+            codeGenerator.AddPropertyInfo("ID6", typeof(sbyte));
+            codeGenerator.AddPropertyInfo("ID7", typeof(ulong));
+            codeGenerator.AddPropertyInfo("ID8", typeof(long));
+            codeGenerator.AddPropertyInfo("Name", typeof(string));
+            codeGenerator.AddPropertyInfo("IsOpen", typeof(bool));
+            codeGenerator.AddPropertyInfo("Speed", typeof(float));
+            codeGenerator.AddPropertyInfo("Speed2", typeof(double));
+
+            string code = codeGenerator.GenerationCode();
+
+            logger.Debug(code);
+
             Console.ReadKey();
         }
 
