@@ -1,5 +1,5 @@
 ﻿
-
+using AurogonTools;
 using System.Collections.Generic;
 
 namespace AurogonCodeGenerator
@@ -115,5 +115,58 @@ namespace AurogonCodeGenerator
         C,
     }
 
+    /// <summary>
+    /// 代码方法接口
+    /// </summary>
+    public interface ICodeMethod
+    {
+        /// <summary>
+        /// 方法名
+        /// </summary>
+        string Name { get; }
 
+        /// <summary>
+        /// 注视
+        /// </summary>
+        string Desc { get; }
+
+        /// <summary>
+        /// 方法参数
+        /// </summary>
+        List<KeyValue<string,string>> Args { get; }
+
+        /// <summary>
+        /// 生成代码
+        /// </summary>
+        /// <returns></returns>
+        string GenerateCode();
+    }
+
+    /// <summary>
+    /// 代码方法语句接口
+    /// </summary>
+    public interface ICodeMethodStatement
+    {
+        /// <summary>
+        /// 语句模板
+        /// </summary>
+        string Template { get; }
+
+        /// <summary>
+        /// 制表符个数
+        /// </summary>
+        int TabCount { get; }
+
+        /// <summary>
+        /// 生成代码
+        /// </summary>
+        /// <returns></returns>
+        string GenerateCode();
+
+        /// <summary>
+        /// 获取制表符
+        /// </summary>
+        /// <returns></returns>
+        string GetTabString();
+    }
 }
