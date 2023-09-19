@@ -34,25 +34,23 @@ namespace ConfigurationGenerator
 
             //ExcelReader excel = new ExcelReader("/Users/aurogonpu/Projects/excel/story.xlsx");
 
-            CodeGenerator codeGenerator = new CodeGenerator("Story");
+            CSharpCodeGenerator codeGenerator = new CSharpCodeGenerator("Story");
             codeGenerator.AddNameSpace("System");
             codeGenerator.AddInterface("IPackage");
-            codeGenerator.AddPropertyInfo("ID", typeof(uint));
-            codeGenerator.AddPropertyInfo("ID2", typeof(int));
-            codeGenerator.AddPropertyInfo("ID3", typeof(ushort));
-            codeGenerator.AddPropertyInfo("ID4", typeof(short));
-            codeGenerator.AddPropertyInfo("ID5", typeof(byte));
-            codeGenerator.AddPropertyInfo("ID6", typeof(sbyte));
-            codeGenerator.AddPropertyInfo("ID7", typeof(ulong));
-            codeGenerator.AddPropertyInfo("ID8", typeof(long));
-            codeGenerator.AddPropertyInfo("Name", typeof(string));
-            codeGenerator.AddPropertyInfo("IsOpen", typeof(bool));
-            codeGenerator.AddPropertyInfo("Speed", typeof(float));
-            codeGenerator.AddPropertyInfo("Speed2", typeof(double));
+            codeGenerator.AddProperty("ID", typeof(uint).Name, 3);
+            codeGenerator.AddProperty("ID2", typeof(int).Name);
+            codeGenerator.AddField("ID3", typeof(ushort).Name);
+            codeGenerator.AddProperty("ID4", typeof(short).Name, 2);
+            codeGenerator.AddField("ID5", typeof(byte).Name);
+            codeGenerator.AddField("ID6", typeof(sbyte).Name);
+            codeGenerator.AddField("ID7", typeof(ulong).Name);
+            codeGenerator.AddProperty("ID8", typeof(long).Name);
+            codeGenerator.AddProperty("Name", typeof(string).Name, 6);
+            codeGenerator.AddProperty("IsOpen", typeof(bool).Name, 1);
+            codeGenerator.AddProperty("Speed", typeof(float).Name);
+            codeGenerator.AddProperty("Speed2", typeof(double).Name);
 
-            string code = codeGenerator.GenerationCode();
-
-            logger.Debug(code);
+            codeGenerator.GeneratorCodeToSave(AppDomain.CurrentDomain.BaseDirectory);
 
             Console.ReadKey();
         }
@@ -81,7 +79,7 @@ namespace ConfigurationGenerator
         }
     }
 
-    public class Setting: BaseSetting
+    public class Setting : BaseSetting
     {
         [Option("a", "accept", helpText = "accept", required = true)]
         public float floatValue { get; set; }
@@ -117,4 +115,5 @@ namespace ConfigurationGenerator
             return $"Name:{Name} IsEnabled:{IsEnabed}";
         }
     }
+
 }

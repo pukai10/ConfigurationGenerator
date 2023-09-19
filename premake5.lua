@@ -130,6 +130,7 @@ project "ConfigurationGenerator"
     {
         "CommandLineOption",
         "AurogonTools",
+        "AurogonCodeGenerator"
     }
 
     nuget 
