@@ -2,6 +2,7 @@ using System;
 using CommandLineOption;
 using AurogonTools;
 using AurogonCodeGenerator;
+using System.Collections.Generic;
 
 namespace ConfigurationGenerator
 {
@@ -36,6 +37,7 @@ namespace ConfigurationGenerator
 
             CSharpCodeGenerator codeGenerator = new CSharpCodeGenerator("Story");
             codeGenerator.AddNameSpace("System");
+           // codeGenerator.SetNameSpace("AurogonRes");
             codeGenerator.AddInterface("IPackage");
             codeGenerator.AddProperty("ID", typeof(uint).Name, 3);
             codeGenerator.AddProperty("ID2", typeof(int).Name);
@@ -49,6 +51,20 @@ namespace ConfigurationGenerator
             codeGenerator.AddProperty("IsOpen", typeof(bool).Name, 1);
             codeGenerator.AddProperty("Speed", typeof(float).Name);
             codeGenerator.AddProperty("Speed2", typeof(double).Name);
+            codeGenerator.AddProperty("stAwardInfo", "AwardInfo");
+
+            var fields = codeGenerator.CodeFields;
+            int tabCount = codeGenerator.GetTabCount();
+            PackStatement statement = new PackStatement(tabCount + 2, fields);
+            UnPackStatement unStatement = new UnPackStatement(tabCount + 2, fields);
+
+            logger.Debug(statement.GenerateCode());
+
+            PackMethod packMethod = new PackMethod("Pack", statement.GenerateCode(),tabCount + 1);
+            UnPackMethod unPackMethod = new UnPackMethod("UnPack", unStatement.GenerateCode(),tabCount + 1);
+
+            codeGenerator.AddMethod(packMethod);
+            codeGenerator.AddMethod(unPackMethod);
 
             codeGenerator.GeneratorCodeToSave(AppDomain.CurrentDomain.BaseDirectory);
 

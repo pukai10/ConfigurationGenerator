@@ -100,7 +100,8 @@ project "AurogonCodeGenerator"
     links 
     {
         "AurogonExtenstion",
-        "AurogonTools"
+        "AurogonTools",
+        "AurogonWRBuffer"
     }
 
 project "AurogonTools"

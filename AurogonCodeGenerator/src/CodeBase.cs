@@ -39,6 +39,8 @@ namespace AurogonCodeGenerator
 
         string GetCodeType();
 
+        int TabCount { get; }
+
         CodeFieldType ConvertCodeFieldType();
     }
 
@@ -74,9 +76,11 @@ namespace AurogonCodeGenerator
 
     public interface ICSharpCodeGenrator: ICodeGenerator
     {
-        List<string> NameSpaces { get; }
+        List<string> UseNameSpaces { get; }
         List<ICodeField> CodeFields { get; }
         List<string> Interfaces { get; }
+        List<ICodeMethod> Methods { get; }
+        string NameSpace { get; }
 
         #region 添加类的组成元素
         void AddNameSpace(string nameSpace);
@@ -87,9 +91,11 @@ namespace AurogonCodeGenerator
 
         void AddInterface(string[] interfaceNames);
 
-        void AddProperty(string propretyName, string propertyTypeName, int arrayCount = 0);
+        void AddProperty(string propretyName, string propertyTypeName, int arrayCount = 0,string desc = "");
 
-        void AddField(string fieldName,string fieldTypeName,int arrayCount = 0);
+        void AddField(string fieldName,string fieldTypeName,int arrayCount = 0,string desc = "");
+
+        void AddMethod(ICodeMethod codeMethod);
         #endregion
 
         #region 代码生成
@@ -105,7 +111,9 @@ namespace AurogonCodeGenerator
         string GenerateCodeFieldsConstruction();
 
         #endregion
+        string GetTabString();
 
+        int GetTabCount();
     }
 
     public enum CodeScriptType
@@ -113,6 +121,13 @@ namespace AurogonCodeGenerator
         CSharp,
         CPlusPlus,
         C,
+    }
+
+    public enum AccessModifier
+    {
+        Private,
+        Public,
+        Protected
     }
 
     /// <summary>
@@ -126,14 +141,22 @@ namespace AurogonCodeGenerator
         string Name { get; }
 
         /// <summary>
-        /// 注视
+        /// 注释
         /// </summary>
-        string Desc { get; }
+        NotationStatement Desc { get; }
 
         /// <summary>
         /// 方法参数
         /// </summary>
-        List<KeyValue<string,string>> Args { get; }
+        string ArgsContent { get; }
+
+        string StatementContent { get; }
+
+        AccessModifier AccessMod { get; }
+
+        int TabCount { get; }
+
+        string GetTabString();
 
         /// <summary>
         /// 生成代码

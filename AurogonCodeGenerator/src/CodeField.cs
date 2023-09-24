@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace AurogonCodeGenerator
 {
@@ -25,6 +26,11 @@ namespace AurogonCodeGenerator
         protected bool m_isArray = false;
         public bool IsArray => m_isArray;
 
+        protected int m_tabCount = 0;
+        public int TabCount => m_tabCount;
+
+        protected string m_tabStr;
+
         public CodeField(string name, string fieldTypeName) : this(name, fieldTypeName, 0)
         {
 
@@ -35,16 +41,28 @@ namespace AurogonCodeGenerator
 
         }
 
-        public CodeField(string name, string fieldTypeName, int size, string desc)
+        public CodeField(string name, string fieldTypeName, int size, string desc,int tabCount = 1)
         {
             m_name = name;
             m_desc = desc;
             m_typeName = fieldTypeName;
             m_size = size;
-            m_isArray = m_size > 0;
+            m_isArray = m_size > 1;
+            m_tabCount = tabCount;
             m_fieldType = ConvertCodeFieldType();
+            m_tabStr = GetTabString();
         }
 
+        public virtual string GetTabString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < TabCount; i++)
+            {
+                sb.Append("\t");
+            }
+
+            return sb.ToString();
+        }
 
         /// <summary>
         /// 构造实现
@@ -55,18 +73,18 @@ namespace AurogonCodeGenerator
             string typeName = GetCodeType();
             if (FieldType == CodeFieldType.Object)
             {
-                return m_isArray ? $"\t\t{Name} = new {typeName}[{Size}];" : $"new {typeName}();";
+                return m_isArray ? $"{m_tabStr}\t{Name} = new {typeName}[{Size}];" : $"{m_tabStr}\t{Name} = new {typeName}();";
             }
             else
             {
-                return m_isArray ? $"\t\t{Name} = new {typeName}[{Size}];" : "";   //其他类型不是数组就不写初始化了
+                return m_isArray ? $"{m_tabStr}\t{Name} = new {typeName}[{Size}];" : "";   //其他类型不是数组就不写初始化了
             }
         }
 
         public virtual string GenerateCode()
         {
             string typeName = GetCodeType();
-            return m_isArray ? $"\tpublic {typeName}[] {Name};" : $"\tpublic {typeName} {Name};";
+            return m_isArray ? $"{m_tabStr}public {typeName}[] {Name};" : $"{m_tabStr}public {typeName} {Name};";
         }
 
         public virtual string GetCodeType()
@@ -100,7 +118,7 @@ namespace AurogonCodeGenerator
                 case CodeFieldType.Decimal:
                     return "decimal";
                 default:
-                    return Name;
+                    return TypeName;
             }
         }
 
@@ -119,10 +137,6 @@ namespace AurogonCodeGenerator
             return other.Name.Equals(Name) && other.TypeName.Equals(TypeName) && other.Size.Equals(Size);
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as CodeField);
-        }
     }
 
 }

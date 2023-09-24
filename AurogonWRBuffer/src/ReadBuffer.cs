@@ -229,6 +229,11 @@ namespace AurogonWRBuffer
             return ret;
         }
 
+
+        public WRErrorType Read<T>(ref T t,ref ReadBuffer reader) where T:IPackage
+        {
+            return t.UnPack(ref reader);
+        }
     }
 }
 

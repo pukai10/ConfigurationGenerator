@@ -13,7 +13,7 @@ namespace AurogonCodeGenerator
 
         }
 
-        public CodePropertyInfo(string name, string fieldTypeName, int size, string desc) : base(name, fieldTypeName, size, desc)
+        public CodePropertyInfo(string name, string fieldTypeName, int size, string desc,int tabCount = 1) : base(name, fieldTypeName, size, desc, tabCount)
         {
         }
 
@@ -26,7 +26,7 @@ namespace AurogonCodeGenerator
         public override string GenerateCode()
         {
             string typeName = GetCodeType();
-            return (m_isArray ? $"\tpublic {typeName}[] {Name}" : $"\tpublic {typeName} {Name}") + "{ get; set;}";
+            return (m_isArray ? $"{m_tabStr}public {typeName}[] {Name}" : $"{m_tabStr}public {typeName} {Name}") + "{ get; set;}";
         }
     }
 }

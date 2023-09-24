@@ -29,6 +29,12 @@ namespace AurogonTools
 
 			return other.Key.Equals(Key) && other.Value.Equals(Value);
         }
+
+        public override string ToString()
+        {
+			return $"{Key} {Value}";
+
+		}
     }
 }
 

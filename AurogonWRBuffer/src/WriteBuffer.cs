@@ -208,7 +208,7 @@ namespace AurogonWRBuffer
             return WRErrorType.NO_ERROR;
         }
 
-        public WRErrorType WriteBool(bool src)
+        public WRErrorType WriteBoolean(bool src)
         {
             byte[] tmp = BitConverter.GetBytes(src);
             return WriteBytes(tmp, tmp.Length);
