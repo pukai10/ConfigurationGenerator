@@ -3,6 +3,8 @@ using CommandLineOption;
 using AurogonTools;
 using AurogonCodeGenerator;
 using System.Collections.Generic;
+using System.Xml;
+using System.Reflection;
 
 namespace ConfigurationGenerator
 {
@@ -27,7 +29,6 @@ namespace ConfigurationGenerator
                 "--accept=",
                 "--accept=11=",
             };
-
 
             //Setting setting = CommandLineParser.Default.Parse<Setting>(args,false);
 

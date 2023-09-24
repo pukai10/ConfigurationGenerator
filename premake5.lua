@@ -67,6 +67,19 @@ project "AurogonExtenstion"
         "AurogonExtenstion/src/**.cs"
     }
 
+project "AurogonXmlConvert"
+    location "AurogonXmlConvert"
+    language "C#"
+    kind "SharedLib"
+    
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files 
+    {
+        "AurogonXmlConvert/src/**.cs"
+    }
+
 project "AurogonWRBuffer"
     location "AurogonWRBuffer"
     language "C#"
