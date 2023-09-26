@@ -80,6 +80,11 @@ project "AurogonXmlConvert"
         "AurogonXmlConvert/src/**.cs"
     }
 
+    links
+    {
+        "System.Xml"
+    }
+
 project "AurogonWRBuffer"
     location "AurogonWRBuffer"
     language "C#"
@@ -161,7 +166,8 @@ project "ConfigurationGenerator"
     {
         "CommandLineOption",
         "AurogonTools",
-        "AurogonCodeGenerator"
+        "AurogonCodeGenerator",
+        "AurogonXmlConvert"
     }
 
     nuget 

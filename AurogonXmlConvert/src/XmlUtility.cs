@@ -358,7 +358,7 @@ namespace AurogonXmlConvert
                 if (xmlAttriNameAttri != null)
                 {
                     object childObj = propertyInfo.GetValue(obj, null);
-                    rootElement.SetAttribute(xmlAttriNameAttri.name, childObj.ToString());
+                    rootElement.SetAttribute(xmlAttriNameAttri.name, childObj == null ? "" : childObj.ToString());
                 }
 
                 XmlNodeNameAttribute xmlNodeNameAttr = propertyInfo.GetCustomAttribute<XmlNodeNameAttribute>(true);
