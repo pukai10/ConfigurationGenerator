@@ -167,7 +167,8 @@ project "ConfigurationGenerator"
         "CommandLineOption",
         "AurogonTools",
         "AurogonCodeGenerator",
-        "AurogonXmlConvert"
+        "AurogonXmlConvert",
+        "System.Xml"
     }
 
     nuget 

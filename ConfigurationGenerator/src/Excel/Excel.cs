@@ -3,16 +3,20 @@ using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System.Collections.Generic;
+using NPOI.OpenXmlFormats.Spreadsheet;
 
 namespace ConfigurationGenerator
 {
 	public class ExcelReader
 	{
 		private string m_excelPath;
-		private IWorkbook m_workbook;
+		private string m_excelName;
+		private List<Sheet> m_sheets;
 		public ExcelReader(string excelPath)
 		{
 			m_excelPath = excelPath;
+			m_excelName = Path.GetFileName(m_excelPath);
 			InitExcel();
         }
 
@@ -34,79 +38,50 @@ namespace ConfigurationGenerator
 
 			FileStream fs = new FileStream(m_excelPath, FileMode.Open, FileAccess.Read);
 			Console.WriteLine(extension);
-			m_workbook = null;
+            IWorkbook workbook = null;
 			switch(extension)
 			{
 				case ".xls":
-                    m_workbook = new HSSFWorkbook(fs);
+                    workbook = new HSSFWorkbook(fs);
                     break;
 				case ".xlsx":
-                    m_workbook = new XSSFWorkbook(fs);
+                    workbook = new XSSFWorkbook(fs);
 					break;
 			}
 
 			fs.Close();
 			fs.Dispose();
 
-			if(m_workbook == null)
+			if(workbook == null)
 			{
 				throw new Exception($"open excel failed,file extension must 'xls' or 'xlsx',please check your file:{m_excelPath}");
 			}
-
-			//int sheetNum = workbook.NumberOfSheets;
-			//for(int i = 0; i < sheetNum; i++)
-			//{
-			//	ISheet sheet = workbook.GetSheetAt(i);
-			//	Console.WriteLine(sheet.SheetName);
-
-			//	Console.WriteLine($"{sheet.FirstRowNum} {sheet.LastRowNum}");
-			//	for (int j = sheet.FirstRowNum; j <= sheet.LastRowNum; j++)
-			//	{
-			//		IRow row = sheet.GetRow(j);
-
-   //                 Console.WriteLine($"row:{row.FirstCellNum} {row.LastCellNum}");
-   //                 for (int cellIndex = row.FirstCellNum; cellIndex < row.LastCellNum; cellIndex++)
-			//		{
-			//			ICell cell = row.GetCell(cellIndex);
-			//			if(cell == null)
-			//			{
-			//				//Console.Write("cell is null,index is" + cellIndex);
-			//				continue;
-			//			}
-
-
-			//			if(cell.CellType == CellType.Formula)
-			//			{
-			//				Console.Write($"公式：{cell.CachedFormulaResultType} {cell.NumericCellValue},");
-			//			}
-
-			//			Console.Write($"{cell} {cell.CellType} ");
-			//		}
-			//		Console.Write("\n");
-			//	}
-			//}
-		}
-
-
-        #region 属性
-
-		public int SheetNum
-		{
-			get
+			m_sheets = new List<Sheet>();
+            m_sheetNum = workbook.NumberOfSheets;
+			for (int i = 0; i < m_sheetNum; i++)
 			{
-				if(m_workbook == null)
-				{
-					throw new WorkbookNullException();
-				}
+				Sheet sheet = new Sheet(workbook.GetSheetAt(i), m_excelName);
 
-				return m_workbook.NumberOfSheets;
+				if(sheet.IsVaild)
+				{
+					m_sheets.Add(sheet);
+                }
 			}
 		}
 
 
+		#region 属性
+
+		private int m_sheetNum;
+		public int SheetNum => m_sheetNum;
+
+		private int m_rowNum;
+		public int RowNum => m_rowNum;
+
+		private int m_columnNum;
+		public int ColumnNum => m_columnNum;
 
         #endregion
-
     }
 
 	public class WorkbookNullException : Exception
@@ -115,6 +90,11 @@ namespace ConfigurationGenerator
 		{
 
 		}
+	}
+
+	public class SheetNullException : Exception
+	{
+		public SheetNullException(string sheetName):base($"sheet:{sheetName} is null") { }
 	}
 }
 

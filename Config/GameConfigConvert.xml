@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ConvertList MetaFilePath="./Meta" ExcelFilePath="./Excel">
+<ConvertList MetaFilePath="/Meta" ExcelFilePath="/Excel">
   <ConfigConvertTree Name="配置列表">
     <ExcelNode Name="Game.xlsx" ExcelName="Game.xlsx">
       <ExcelSheetNode name="Game.xlsx- 英雄" sheet="英雄" struct="HeroCfg" binary="./HeroCfg.bytes" meta="./HeroCfg.xml" />

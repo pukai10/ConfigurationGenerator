@@ -20,6 +20,11 @@ namespace ConfigurationGenerator
         {
             Console.WriteLine("Hello World!");
 
+            args = new string[]
+            {
+                "--path",
+                "..\\..\\..\\Config\\GameConfigConvert.xml"
+            };
             ILogger logger = Logger.GetLogger(new LoggerSetting() { logType = LogType.All });
 
             //Setting setting = CommandLineParser.Default.Parse<Setting>(args,false);
@@ -100,22 +105,21 @@ namespace ConfigurationGenerator
             ConfigurationSetting configSetting = CommandLineParser.Default.Parse<ConfigurationSetting>(args, true);
 
             string path = AppDomain.CurrentDomain.BaseDirectory + configSetting.ConfigConvertFilePath;
-            path = path.Replace("/", "\\");
-            logger.Info(path);
+            path = path.SystemPath();
             ConfigGeneration config = XmlUtility.FromXml<ConfigGeneration>(path);
 
             logger.Info(config.ToString());
 
             string configRootPath = Path.GetDirectoryName(path);
 
-            string excelPath = configRootPath + config.ExcelFilesPath.Replace("/","\\");
+            string excelPath = configRootPath + config.ExcelFilesPath;
 
             logger.Debug(excelPath);
-            PrintDirAllFiles(excelPath);
-            string metaPath = configRootPath + config.MetaFilesPath.Replace("/", "\\");
+            PrintDirAllFiles(excelPath.SystemPath());
+            string metaPath = configRootPath + config.MetaFilesPath;
 
             logger.Debug(metaPath);
-            PrintDirAllFiles(metaPath);
+            PrintDirAllFiles(metaPath.SystemPath());
 
             if (configSetting.HelpText)
             {
