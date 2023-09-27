@@ -7,6 +7,7 @@ using System.Xml;
 using System.Reflection;
 using AurogonXmlConvert;
 using static Org.BouncyCastle.Math.EC.ECCurve;
+using System.IO;
 
 namespace ConfigurationGenerator
 {
@@ -60,20 +61,20 @@ namespace ConfigurationGenerator
 
             // codeGenerator.GeneratorCodeToSave(AppDomain.CurrentDomain.BaseDirectory);
 
-            ConfigGeneration config = new ConfigGeneration();
-            config.ConvertTree = new List<ConfigConvertTree>();
-            ConfigConvertTree tree = new ConfigConvertTree();
-            tree.ExcelNodes = new List<ExcelNode>();
-            ExcelNode excelNode = new ExcelNode();
-            excelNode.Name = "Test.xlsx";
-            excelNode.SheetNodes = new List<ExcelSheetNode>
-            {
-                new ExcelSheetNode() { Name = "Test.xlsx - test1", BinaryFile = "./test1.bytes", MetaFile = "./Test.xml", SheetName = "Test1", StructName = "Test1" }
-            };
-            tree.ExcelNodes.Add(excelNode);
-            config.ConvertTree.Add(tree);
+            //ConfigGeneration config = new ConfigGeneration();
+            //config.ConvertTree = new List<ConfigConvertTree>();
+            //ConfigConvertTree tree = new ConfigConvertTree();
+            //tree.ExcelNodes = new List<ExcelNode>();
+            //ExcelNode excelNode = new ExcelNode();
+            //excelNode.Name = "Test.xlsx";
+            //excelNode.SheetNodes = new List<ExcelSheetNode>
+            //{
+            //    new ExcelSheetNode() { Name = "Test.xlsx - test1", BinaryFile = "./test1.bytes", MetaFile = "./Test.xml", SheetName = "Test1", StructName = "Test1" }
+            //};
+            //tree.ExcelNodes.Add(excelNode);
+            //config.ConvertTree.Add(tree);
 
-            XmlUtility.ToXml<ConfigGeneration>(config, AppDomain.CurrentDomain.BaseDirectory + "gamecfg.xml");
+            //XmlUtility.ToXml<ConfigGeneration>(config, AppDomain.CurrentDomain.BaseDirectory + "gamecfg.xml");
 
             //ConfigMeta configMeta = new ConfigMeta();
             //configMeta.NameSpace = "AurogonRes";
@@ -98,8 +99,23 @@ namespace ConfigurationGenerator
 
             ConfigurationSetting configSetting = CommandLineParser.Default.Parse<ConfigurationSetting>(args, true);
 
-            logger.Info(configSetting.ToString());
+            string path = AppDomain.CurrentDomain.BaseDirectory + configSetting.ConfigConvertFilePath;
+            path = path.Replace("/", "\\");
+            logger.Info(path);
+            ConfigGeneration config = XmlUtility.FromXml<ConfigGeneration>(path);
 
+            logger.Info(config.ToString());
+
+            string configRootPath = Path.GetDirectoryName(path);
+
+            string excelPath = configRootPath + config.ExcelFilesPath.Replace("/","\\");
+
+            logger.Debug(excelPath);
+            PrintDirAllFiles(excelPath);
+            string metaPath = configRootPath + config.MetaFilesPath.Replace("/", "\\");
+
+            logger.Debug(metaPath);
+            PrintDirAllFiles(metaPath);
 
             if (configSetting.HelpText)
             {
@@ -114,64 +130,19 @@ namespace ConfigurationGenerator
             Console.ReadKey();
         }
 
-        private static void TestLogger()
+        private static void PrintDirAllFiles(string path)
         {
-            ILogger logger = Logger.GetLogger("Main", new LoggerSetting() { logType = LogType.All });
-            var logCallback = logger as IRegisterLogCallback;
-            logCallback.RegisterLogCallback(OnReigisterLogCallBack);
-            int index = 0;
-            for (int i = 0; i < 2; i++)
+            DirectoryInfo info = new DirectoryInfo(path);
+            var files = info.GetFiles("*.*",SearchOption.AllDirectories);
+            foreach (var file in files)
             {
-                logger.Debug($"Debug Log:{index}");
-                logger.Info($"Info Log:{index}");
-                logger.Warning($"Warning Log:{index}");
-                logger.Error($"Error Log:{index}");
-                logger.Fatal($"Fatal Log:{index}");
-                index++;
+                Console.WriteLine(file.FullName);
             }
-
         }
 
         private static void OnReigisterLogCallBack(string content, LogType logType, string stackTrace)
         {
             Console.WriteLine(content, logType, stackTrace);
-        }
-    }
-
-    public class Setting : BaseSetting
-    {
-        [Option("a", "accept", helpText = "accept", required = true)]
-        public float floatValue { get; set; }
-
-        [Option("b", "batchmode", helpText = "batch mode start", required = false)]
-        public bool IsBatchMode { get; set; }
-
-        [Option("p", "path", helpText = "设置路径", required = true)]
-        public string Path { get; set; }
-
-        public int test1 { get; set; }
-
-        public override string ToString()
-        {
-            return $"Setting ->floatValue:{floatValue} Path:{Path} IsBatchMode:{IsBatchMode} {base.ToString()}";
-        }
-    }
-
-
-    public class BaseSetting
-    {
-        [Option("m", "name", helpText = "设置路径", required = true)]
-        public string Name { get; set; }
-
-
-        [Option("d", "disable", helpText = "disable mode start", required = false)]
-        public bool IsEnabed { get; set; }
-
-        public string test2 { get; set; }
-
-        public override string ToString()
-        {
-            return $"Name:{Name} IsEnabled:{IsEnabed}";
         }
     }
 
