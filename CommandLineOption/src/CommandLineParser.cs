@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using AurogonTools;
+using System.Text;
 
 namespace CommandLineOption
 {
@@ -14,7 +15,45 @@ namespace CommandLineOption
         private static readonly Lazy<CommandLineParser> m_default = new Lazy<CommandLineParser>(()=> new CommandLineParser());
         public static CommandLineParser Default => m_default.Value;
 
+        private static List<OptionProperty> m_allOptionProperties = new List<OptionProperty>();
+
         private ILogger m_logger;
+
+
+        public static void AddOptionProperties(IEnumerable<OptionProperty> optionProperties)
+        {
+            foreach (var property in optionProperties)
+            {
+                if(m_allOptionProperties.Contains(property) == false)
+                {
+                    m_allOptionProperties.Add(property);
+                }
+            }
+        }
+
+        public static string GetOptionHelpText(string option)
+        {
+            foreach (var optionProperty in m_allOptionProperties)
+            {
+                if(optionProperty.shortName.Equals(option) || optionProperty.longName.Equals(option))
+                {
+                    return optionProperty.GetHelpText();
+                }
+            }
+
+            return $"没有找到您输入的: {option} 命令";
+        }
+
+        public static string GetAllOptionHelpText()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("下面列出列所有命令");
+            foreach (var optionProperty in m_allOptionProperties)
+            {
+                sb.AppendLine(optionProperty.GetHelpText());
+            }
+            return sb.ToString();
+        }
 
         public CommandLineParser()
         {
@@ -33,7 +72,7 @@ namespace CommandLineOption
             T obj = Activator.CreateInstance<T>();
             List<string> errors = new List<string>();
             var optProperties = type.GetProperties().Where((p) => p.GetCustomAttributes().OfType<OptionAttribute>().Any()).Select((opt) => new OptionProperty(opt,opt.GetCustomAttribute<OptionAttribute>()));
-
+            AddOptionProperties(optProperties);
             for (int argIndex = 0; argIndex < args.Length; argIndex++)
             {
                 var arg = args[argIndex];
@@ -97,6 +136,7 @@ namespace CommandLineOption
                 {
                     optProperty.SetPropertyValue<T>(obj, "true");
                 }
+                return;
             }
 
             int argIndex = 0;

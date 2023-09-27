@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace CommandLineOption
 {
-    public class OptionProperty
+    public class OptionProperty :IEquatable<OptionProperty>
     {
         private readonly string m_shortName;
         private readonly string m_longName;
@@ -72,5 +72,25 @@ namespace CommandLineOption
         {
             return $"shortName:{shortName} longName:{longName} helpText:{helpText} required:{required} property:{propertyInfo.PropertyType}";
         }
+
+        public string GetHelpText()
+        {
+            if(m_required)
+            {
+                return string.Format("-{0,-5} --{1,-15}: {2} ", shortName, longName + "(arg)", helpText);
+            }
+            return string.Format("-{0,-5} --{1,-15}: {2} ", shortName, longName, helpText);
+        }
+
+        public bool Equals(OptionProperty other)
+        {
+            if(other == null)
+            {
+                return false;
+            }
+
+            return this.shortName == other.shortName && this.longName == other.longName;
+        }
+
     }
 }

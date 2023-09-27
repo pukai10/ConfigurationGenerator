@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using AurogonXmlConvert;
 
 namespace ConfigurationGenerator
@@ -15,6 +16,16 @@ namespace ConfigurationGenerator
 
 		[XmlChildNodeList("struct",typeof(ConfigStruct))]
 		public List<ConfigStruct> Structs { get; set; }
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine($"NameSpace:{NameSpace} Version:{Version}");
+			foreach (var str in Structs)
+			{
+				sb.AppendLine($"\t{str.ToString()}");
+			}
+			return sb.ToString();
+		}
 	}
 
 
@@ -29,7 +40,18 @@ namespace ConfigurationGenerator
 
 		[XmlChildNodeList("property",typeof(StructProperty))]
 		public List<StructProperty> Properties { get; set; }
-	}
+
+        public override string ToString()
+        {
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine($"Name:{Name} Desc:{Desc}");
+            foreach (var property in Properties)
+            {
+				sb.AppendLine($"\t{property.ToString()}");
+            }
+            return sb.ToString();
+        }
+    }
 
 	[XmlNodeName("property",typeof(StructProperty))]
 	public class StructProperty
@@ -51,6 +73,11 @@ namespace ConfigurationGenerator
 
 		[XmlAttributionName("desc")]
 		public string Desc { get; set; }
-	}
+
+        public override string ToString()
+        {
+			return $"PropertyName:{PropertyName} PropertyType:{PropertyType} Size:{Size} Count:{Count} CName:{CName} Desc:{Desc}";
+        }
+    }
 }
 

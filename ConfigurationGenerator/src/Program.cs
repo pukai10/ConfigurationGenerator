@@ -13,24 +13,13 @@ namespace ConfigurationGenerator
     class Program
     {
 
+        private static string Version = "0.1";
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
 
             ILogger logger = Logger.GetLogger(new LoggerSetting() { logType = LogType.All });
-            args = new string[10]
-            {
-                "-",
-                "--",
-                "-abc",
-                "1.73",
-                "Aurogonpu",
-                "-p",
-                "d:/test/test.log",
-                "--name=test.log",
-                "--accept=",
-                "--accept=11=",
-            };
 
             //Setting setting = CommandLineParser.Default.Parse<Setting>(args,false);
 
@@ -71,37 +60,56 @@ namespace ConfigurationGenerator
 
             // codeGenerator.GeneratorCodeToSave(AppDomain.CurrentDomain.BaseDirectory);
 
-            //ConfigGeneration config = new ConfigGeneration();
-            //config.Name = "AurogonGame";
-            //config.ExcelNodes = new List<ExcelNode>();
-
-            //ExcelNode excelNode = new ExcelNode();
-            //excelNode.Name = "Test.xlsx";
-            //excelNode.SheetNodes = new List<ExcelSheetNode>
-            //{
-            //    new ExcelSheetNode() { Name = "Test.xlsx - test1", BinaryFile = "./test1.bytes", MetaFile = "./Test.xml", SheetName = "Test1", StructName = "Test1" }
-            //};
-
-            //config.ExcelNodes.Add(excelNode);
-
-            //XmlUtility.ToXml<ConfigGeneration>(config, AppDomain.CurrentDomain.BaseDirectory + "gamecfg.xml");
-
-            ConfigMeta configMeta = new ConfigMeta();
-            configMeta.NameSpace = "AurogonRes";
-            configMeta.Structs = new List<ConfigStruct>();
-            ConfigStruct configStruct = new ConfigStruct();
-            configStruct.Name = "Test1";
-            configStruct.Desc = "Test1 cfg";
-            configStruct.Properties = new List<StructProperty>()
+            ConfigGeneration config = new ConfigGeneration();
+            config.ConvertTree = new List<ConfigConvertTree>();
+            ConfigConvertTree tree = new ConfigConvertTree();
+            tree.ExcelNodes = new List<ExcelNode>();
+            ExcelNode excelNode = new ExcelNode();
+            excelNode.Name = "Test.xlsx";
+            excelNode.SheetNodes = new List<ExcelSheetNode>
             {
-                new StructProperty(){ PropertyName = "ID", PropertyType = "uint32", CName = "ID",Desc = "hero id"},
-                new StructProperty(){ PropertyName = "Name",PropertyType = "string", Size = 64, CName = "Name", Desc = "hero name"},
-                new StructProperty(){PropertyName = "SkillList",PropertyType = "uint32",Count = 5,CName = "Skill",Desc = "hero skill"}
+                new ExcelSheetNode() { Name = "Test.xlsx - test1", BinaryFile = "./test1.bytes", MetaFile = "./Test.xml", SheetName = "Test1", StructName = "Test1" }
             };
-            configMeta.Structs.Add(configStruct);
+            tree.ExcelNodes.Add(excelNode);
+            config.ConvertTree.Add(tree);
 
-            XmlUtility.ToXml<ConfigMeta>(configMeta, AppDomain.CurrentDomain.BaseDirectory + "gamemeta.xml");
+            XmlUtility.ToXml<ConfigGeneration>(config, AppDomain.CurrentDomain.BaseDirectory + "gamecfg.xml");
 
+            //ConfigMeta configMeta = new ConfigMeta();
+            //configMeta.NameSpace = "AurogonRes";
+            //configMeta.Structs = new List<ConfigStruct>();
+            //ConfigStruct configStruct = new ConfigStruct();
+            //configStruct.Name = "Test1";
+            //configStruct.Desc = "Test1 cfg";
+            //configStruct.Properties = new List<StructProperty>()
+            //{
+            //    new StructProperty(){ PropertyName = "ID", PropertyType = "uint32", CName = "ID",Desc = "hero id"},
+            //    new StructProperty(){ PropertyName = "Name",PropertyType = "string", Size = 64, CName = "Name", Desc = "hero name"},
+            //    new StructProperty(){PropertyName = "SkillList",PropertyType = "uint32",Count = 5,CName = "Skill",Desc = "hero skill"}
+            //};
+            //configMeta.Structs.Add(configStruct);
+
+            // XmlUtility.ToXml<ConfigMeta>(configMeta, AppDomain.CurrentDomain.BaseDirectory + "gamemeta.xml");
+
+            //ConfigMeta config = XmlUtility.FromXml<ConfigMeta>(AppDomain.CurrentDomain.BaseDirectory + "gamemeta.xml");
+
+            //logger.Info(config.ToString());
+
+
+            ConfigurationSetting configSetting = CommandLineParser.Default.Parse<ConfigurationSetting>(args, true);
+
+            logger.Info(configSetting.ToString());
+
+
+            if (configSetting.HelpText)
+            {
+                Console.WriteLine(CommandLineParser.GetAllOptionHelpText());
+            }
+
+            if(configSetting.Version)
+            {
+                Console.WriteLine($"ConfigurationGenerator:{Version}");
+            }
 
             Console.ReadKey();
         }
