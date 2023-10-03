@@ -39,8 +39,6 @@ namespace AurogonCodeGenerator
 
         string GetCodeType();
 
-        int TabCount { get; }
-
         CodeFieldType ConvertCodeFieldType();
     }
 
@@ -48,7 +46,7 @@ namespace AurogonCodeGenerator
     {
         string Name { get; }
         string Desc { get; }
-        string BaseTypeName { get; }
+        int TabCount { get; }
 
         /// <summary>
         /// 代码创建
@@ -61,46 +59,67 @@ namespace AurogonCodeGenerator
         /// </summary>
         /// <returns></returns>
         string GenerateCodeConstruct();
+
+        string GetTabString();
     }
 
     public interface ICodeGenerator: ICodeBase
     {
         CodeScriptType ScriptType { get; }
-
         #region 代码保存
 
         void GeneratorCodeToSave(string savePath);
 
         #endregion
+
     }
 
     public interface ICSharpCodeGenrator: ICodeGenerator
     {
         List<string> UseNameSpaces { get; }
-        List<ICodeField> CodeFields { get; }
-        List<string> Interfaces { get; }
-        List<ICodeMethod> Methods { get; }
+        List<ICSharpClassGenrator> Classes { get; }
         string NameSpace { get; }
 
         #region 添加类的组成元素
-        void AddNameSpace(string nameSpace);
+        void AddUseNameSpace(string nameSpace);
 
-        void AddNameSpace(string[] nameSpaces);
+        void AddUseNameSpace(string[] nameSpaces);
+
+        void SetNameSpace(string nameSpace);
+
+        void AddClass(ICSharpClassGenrator csharpClass);
+        #endregion
+
+
+        string GenerateNameSpaces();
+
+        int GetTabCount();
+
+
+    }
+
+    public interface ICSharpClassGenrator : ICodeBase
+    {
+        List<ICodeField> CodeFields { get; }
+        List<string> Interfaces { get; }
+        List<ICodeMethod> Methods { get; }
+        string BaseTypeName { get; }
+
+        #region 添加类的组成元素
 
         void AddInterface(string interfaceName);
 
         void AddInterface(string[] interfaceNames);
 
-        void AddProperty(string propretyName, string propertyTypeName, int arrayCount = 0,string desc = "");
+        void AddProperty(string propretyName, string propertyTypeName, int arrayCount = 0, string desc = "");
 
-        void AddField(string fieldName,string fieldTypeName,int arrayCount = 0,string desc = "");
+        void AddField(string fieldName, string fieldTypeName, int arrayCount = 0, string desc = "");
 
         void AddMethod(ICodeMethod codeMethod);
+
         #endregion
 
         #region 代码生成
-
-        string GenerateNameSpaces();
 
         string GenerateScriptName();
 
@@ -111,9 +130,6 @@ namespace AurogonCodeGenerator
         string GenerateCodeFieldsConstruction();
 
         #endregion
-        string GetTabString();
-
-        int GetTabCount();
     }
 
     public enum CodeScriptType

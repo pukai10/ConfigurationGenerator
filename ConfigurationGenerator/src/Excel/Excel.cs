@@ -82,6 +82,41 @@ namespace ConfigurationGenerator
 		public int ColumnNum => m_columnNum;
 
         #endregion
+
+		public Sheet this[int index]
+		{
+			get
+			{
+				if(m_sheets == null || m_sheets.Count <= index || index < 0)
+				{
+					throw new Exception("sheets is null or index out of range,or index less 0");
+				}
+
+				return m_sheets[index];
+			}
+		}
+
+		public Sheet this[string sheetName]
+		{
+			get
+			{
+				if(m_sheets == null)
+				{
+					throw new Exception("excel no sheet");
+				}
+
+				for (int i = 0; i < m_sheets.Count; i++)
+				{
+					Sheet sheet = m_sheets[i];
+					if(sheet != null && sheet.IsVaild && sheet.SheetName == sheetName)
+					{
+						return sheet;
+					}
+				}
+
+				return null;
+			}
+		}
     }
 
 	public class WorkbookNullException : Exception

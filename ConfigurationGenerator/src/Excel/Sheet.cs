@@ -1,6 +1,7 @@
 ﻿using System;
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
+using NPOI.SS.Formula.Functions;
 
 namespace ConfigurationGenerator
 {
@@ -123,6 +124,44 @@ namespace ConfigurationGenerator
 
 		private int m_columnNum;
 		public int ColumnNum => m_columnNum;
+
+		public Cell[] this[int index]
+		{
+			get
+			{
+				if(m_cells == null)
+				{
+					throw new Exception("没有单元格数据");
+				}
+
+				if(index < 0 || index >= m_cells.Count)
+				{
+					throw new Exception($"index less 0 or index out of range,index:{index},max:{m_cells.Count}");
+				}
+
+				return m_cells[index];
+			}
+		}
+
+		public Cell this[int rowIndex,int colunmIndex]
+		{
+			get
+			{
+				Cell[] cells = this[rowIndex];
+
+				if(cells == null)
+				{
+					return null;
+				}
+
+				if(cells.Length <= colunmIndex || colunmIndex < 0)
+                {
+                    throw new Exception($"colunmIndex less 0 or colunmIndex out of range,colunmIndex:{colunmIndex},maxColunmNum:{cells.Length}");
+                }
+
+				return cells[colunmIndex];
+			}
+		}
 
 		#endregion
 

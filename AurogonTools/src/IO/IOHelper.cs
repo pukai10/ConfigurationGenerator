@@ -21,5 +21,59 @@ namespace AurogonTools
 #endif
             return path;
         }
+
+        public static void SaveFile(string path,string content)
+        {
+            path = SystemPath(path);
+            if(File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
+            File.WriteAllText(path, content);
+        }
+
+        public static void SaveFile(string path, byte[] datas)
+        {
+            path = SystemPath(path);
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
+            File.WriteAllBytes(path, datas);
+        }
+
+        public static string ReadFileText(string path,bool create = false)
+        {
+            path = SystemPath(path);
+            if (File.Exists(path) == false)
+            {
+                if(!create)
+                {
+                    throw new System.Exception("文件不存在：" + path);
+                }
+
+                File.WriteAllText(path, string.Empty);
+            }
+
+            return File.ReadAllText(path);
+        }
+
+        public static byte[] ReadFileBytes(string path, bool create = false)
+        {
+            path = SystemPath(path);
+            if (File.Exists(path) == false)
+            {
+                if (!create)
+                {
+                    throw new System.Exception("文件不存在：" + path);
+                }
+
+                File.WriteAllText(path, string.Empty);
+            }
+
+            return File.ReadAllBytes(path);
+        }
     }
 }

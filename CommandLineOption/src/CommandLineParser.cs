@@ -12,13 +12,41 @@ namespace CommandLineOption
     /// </summary>
     public class CommandLineParser
     {
-        private static readonly Lazy<CommandLineParser> m_default = new Lazy<CommandLineParser>(()=> new CommandLineParser());
+        private static readonly Lazy<CommandLineParser> m_default = new Lazy<CommandLineParser>(() =>
+        {
+            return InitParser();
+        });
+
+        private static CommandLineParser InitParser()
+        {
+            var parser = new CommandLineParser();
+
+            Type type = typeof(CommandLineParser);
+
+            var optProperties = type.GetProperties().Where((p) => p.GetCustomAttributes().OfType<OptionAttribute>().Any()).Select((opt) => new OptionProperty(opt, opt.GetCustomAttribute<OptionAttribute>()));
+
+            m_defaultOptionProperties = new List<OptionProperty>();
+
+            foreach (var property in optProperties)
+            {
+                if (m_defaultOptionProperties.Contains(property) == false)
+                {
+                    m_defaultOptionProperties.Add(property);
+                }
+            }
+
+            return parser;
+        }
+
         public static CommandLineParser Default => m_default.Value;
 
         private static List<OptionProperty> m_allOptionProperties = new List<OptionProperty>();
+        private static List<OptionProperty> m_defaultOptionProperties = new List<OptionProperty>();
 
         private ILogger m_logger;
 
+        [Option("h","help",helpText = "所有命令参数帮助文档")]
+        public bool IsHelpText { get; set; }
 
         public static void AddOptionProperties(IEnumerable<OptionProperty> optionProperties)
         {
@@ -119,13 +147,26 @@ namespace CommandLineOption
             string opts = arg.Substring(1);
 
             var optProperty = optionProperties.Where(p => p.IsMatch(opts)).SingleOrDefault();
+            bool isDefaltProperty = false;
+            if(optProperty == null)
+            {
+                optProperty = m_defaultOptionProperties.Where(p => p.IsMatch(opts)).SingleOrDefault();
+                isDefaltProperty = optProperty != null;
+            }
             if(optProperty != null)
             {
                 if (optProperty.required)
                 {
                     if (args.Length > (index + 1) && args[index + 1].StartsWith("-",StringComparison.Ordinal) == false)
                     {
-                        optProperty.SetPropertyValue<T>(obj, args[index + 1]);
+                        if(isDefaltProperty)
+                        {
+                            optProperty.SetPropertyValue<CommandLineParser>(m_default.Value, args[index + 1]);
+                        }
+                        else
+                        {
+                            optProperty.SetPropertyValue<T>(obj, args[index + 1]);
+                        }
                     }
                     else
                     {
@@ -134,15 +175,31 @@ namespace CommandLineOption
                 }
                 else
                 {
-                    optProperty.SetPropertyValue<T>(obj, "true");
+                    if (isDefaltProperty)
+                    {
+                        optProperty.SetPropertyValue<CommandLineParser>(m_default.Value, "true");
+                    }
+                    else
+                    {
+                        optProperty.SetPropertyValue<T>(obj, "true");
+                    }
                 }
                 return;
             }
 
+
             int argIndex = 0;
             for (int i = 0; i < opts.Length; i++)
             {
+                isDefaltProperty = false;
                 var opt = optionProperties.Where(p => p.IsMatch(opts[i])).SingleOrDefault();
+
+                if(opt == null)
+                {
+                    opt = m_defaultOptionProperties.Where(p => p.IsMatch(opts[i])).SingleOrDefault();
+                    isDefaltProperty = opt != null;
+                }
+
                 if(opt != null)
                 {
                     if (opt.required)
@@ -150,7 +207,14 @@ namespace CommandLineOption
                         argIndex++;
                         if (args.Length > (index + argIndex) && args[index + argIndex].StartsWith("-", StringComparison.Ordinal) == false)
                         {
-                            opt.SetPropertyValue<T>(obj, args[index + argIndex]);
+                            if(isDefaltProperty)
+                            {
+                                opt.SetPropertyValue<CommandLineParser>(m_default.Value, args[index + argIndex]);
+                            }
+                            else
+                            {
+                                opt.SetPropertyValue<T>(obj, args[index + argIndex]);
+                            }
                         }
                         else
                         {
@@ -159,7 +223,14 @@ namespace CommandLineOption
                     }
                     else
                     {
-                        opt.SetPropertyValue<T>(obj, "true");
+                        if(isDefaltProperty)
+                        {
+                            opt.SetPropertyValue<CommandLineParser>(m_default.Value, "true");
+                        }
+                        else
+                        {
+                            opt.SetPropertyValue<T>(obj, "true");
+                        }
                     }
                 }
             }

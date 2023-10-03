@@ -2,11 +2,7 @@ using System;
 using CommandLineOption;
 using AurogonTools;
 using AurogonCodeGenerator;
-using System.Collections.Generic;
-using System.Xml;
-using System.Reflection;
 using AurogonXmlConvert;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 using System.IO;
 
 namespace ConfigurationGenerator

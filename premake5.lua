@@ -151,7 +151,7 @@ project "CommandLineOption"
 
     files 
     {
-        "CommandLineOption/**.cs"
+        "CommandLineOption/src/**.cs"
     }
 
 project "ConfigurationGenerator"
@@ -179,4 +179,27 @@ project "ConfigurationGenerator"
     files 
     {
         "ConfigurationGenerator/**.cs"
+    }
+
+project "ConfigCodeGenerator"
+    location "ConfigCodeGenerator"
+    kind "ConsoleApp"
+    language "C#"
+    
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    links 
+    {
+        "CommandLineOption",
+        "AurogonTools",
+        "AurogonCodeGenerator",
+        "AurogonXmlConvert",
+        "AurogonCodeGenerator",
+        "System.Xml"
+    }
+
+    files 
+    {
+        "ConfigCodeGenerator/src/**.cs"
     }

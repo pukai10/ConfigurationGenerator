@@ -8,142 +8,87 @@ namespace AurogonCodeGenerator
 {
     public class CSharpCodeGenerator : ICSharpCodeGenrator
     {
-        private readonly string m_name;
-        public string Name => m_name;
+        private List<string> m_useNameSpaces;
+        public List<string> UseNameSpaces => m_useNameSpaces;
 
-        private readonly string m_desc;
-        public string Desc => m_desc;
+        private List<ICSharpClassGenrator> m_classes;
+        public List<ICSharpClassGenrator> Classes => m_classes;
 
-        private readonly string m_baseTypeName;
-        public string BaseTypeName => m_baseTypeName;
+        private string m_namespace;
+        public string NameSpace => m_namespace;
 
-        private List<string> m_nameSpaces;
-        public List<string> UseNameSpaces => m_nameSpaces;
-
-        private List<ICodeField> m_codeFields;
-        public List<ICodeField> CodeFields => m_codeFields;
-
-        private List<string> m_interfaces;
-        public List<string> Interfaces => m_interfaces;
-
-        private CodeScriptType m_scriptType;
+        private CodeScriptType m_scriptType = CodeScriptType.CSharp;
         public CodeScriptType ScriptType => m_scriptType;
 
-        private List<ICodeMethod> m_methods;
-        public List<ICodeMethod> Methods => m_methods;
+        private string m_name;
+        public string Name => m_name;
 
-        private string m_nameSpace;
-        public string NameSpace => m_nameSpace;
+        private string m_desc;
+        public string Desc => m_desc;
 
-        #region 构造方法
+        public int TabCount => GetTabCount();
 
         public CSharpCodeGenerator(string name) : this(name, string.Empty) { }
 
-        public CSharpCodeGenerator(string name, string typeName) : this(name, typeName, string.Empty) { }
-
-        public CSharpCodeGenerator(string name, string typeName, string desc)
+        public CSharpCodeGenerator(string name,string desc)
         {
             m_name = name;
-            m_baseTypeName = typeName;
             m_desc = desc;
-            m_nameSpaces = new List<string>();
-            m_codeFields = new List<ICodeField>();
-            m_interfaces = new List<string>();
-            m_methods = new List<ICodeMethod>();
             m_scriptType = CodeScriptType.CSharp;
+            m_useNameSpaces = new List<string>();
+            m_classes = new List<ICSharpClassGenrator>();
+            m_namespace = string.Empty;
         }
 
-        #endregion
-
-        public void SetNameSpace(string nameSpace)
+        public void AddClass(ICSharpClassGenrator csharpClass)
         {
-            m_nameSpace = nameSpace;
-        }
-
-        public void AddNameSpace(string nameSpace)
-        {
-            if (string.IsNullOrEmpty(nameSpace))
+            if(m_classes == null)
             {
-                return;
+                m_classes = new List<ICSharpClassGenrator>();
             }
 
-            m_nameSpaces.ListAdd(nameSpace);
+            m_classes.Add(csharpClass);
         }
 
-        public void AddNameSpace(string[] nameSpaces)
+        public void AddUseNameSpace(string nameSpace)
+        {
+            if(m_useNameSpaces == null)
+            {
+                m_useNameSpaces = new List<string>();
+            }
+
+            if(m_useNameSpaces.Contains(nameSpace) == false)
+            {
+                m_useNameSpaces.Add(nameSpace);
+            }
+        }
+
+        public void AddUseNameSpace(string[] nameSpaces)
         {
             foreach (var nameSpace in nameSpaces)
             {
-                AddNameSpace(nameSpace);
+                AddUseNameSpace(nameSpace);
             }
         }
-
-        public void AddInterface(string interfaceName)
-        {
-            if (string.IsNullOrEmpty(interfaceName))
-            {
-                return;
-            }
-
-            m_interfaces.ListAdd(interfaceName);
-        }
-
-        public void AddInterface(string[] interfaceNames)
-        {
-            foreach (var interfaceName in interfaceNames)
-            {
-                AddInterface(interfaceName);
-            }
-        }
-
-        public void AddProperty(string propretyName, string propertyTypeName, int arrayCount = 0,string desc = "")
-        {
-            int tabCount = GetTabCount();
-            CodePropertyInfo propertyInfo = new CodePropertyInfo(propretyName, propertyTypeName, arrayCount,desc,tabCount + 1);
-            CodeFields.ListAdd(propertyInfo);
-        }
-
-        public void AddField(string fieldName, string fieldTypeName, int arrayCount = 0, string desc = "")
-        {
-            int tabCount = GetTabCount();
-            CodeField field = new CodeField(fieldName, fieldTypeName, arrayCount, desc, tabCount + 1);
-            CodeFields.ListAdd(field);
-        }
-
-        public void AddMethod(ICodeMethod codeMethod)
-        {
-            Methods.Add(codeMethod);
-        }
-
-
-
-        #region 代码生成
 
         public string GenerateCode()
         {
-            string nameSpaces = GenerateNameSpaces();
-            string scriptName = GenerateScriptName();
-            string fields = GenerateCodeFields();
-            string construct = GenerateCodeConstruct();
-            string methods = GenerateMethodCode();
-            string tabStr = GetTabString();
-            StringBuilder sb = new StringBuilder();
-            sb.Append(nameSpaces);
+            string nameSpaceCode = GenerateNameSpaces();
 
-            if(!string.IsNullOrEmpty(NameSpace))
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Desc);
+            sb.Append(nameSpaceCode);
+
+            if (!string.IsNullOrEmpty(NameSpace))
             {
-                sb.Append($"namesapce {NameSpace}\n");
+                sb.Append($"namespace {NameSpace}\n");
                 sb.Append("{\n");
             }
 
-            sb.Append(scriptName);
-            sb.Append(tabStr);
-            sb.Append("{\n");
-            sb.Append(fields);
-            sb.Append(construct);
-            sb.Append(methods);
-            sb.Append(tabStr);
-            sb.Append("}\n");
+            foreach (var classItem in Classes)
+            {
+                sb.AppendLine(classItem.GenerateCode());
+            }
 
 
             if (!string.IsNullOrEmpty(NameSpace))
@@ -153,27 +98,9 @@ namespace AurogonCodeGenerator
             return sb.ToString();
         }
 
-        public int GetTabCount()
-        {
-            return string.IsNullOrEmpty(NameSpace) ? 0 : 1;
-        }
-
         public string GenerateCodeConstruct()
         {
-            StringBuilder sb = new StringBuilder();
-
-            string tabStr = GetTabString();
-            sb.AppendLine($"{tabStr}\tpublic {Name}()");
-            sb.Append(tabStr);
-            sb.AppendLine("\t{");
-            string field = GenerateCodeFieldsConstruction();
-            if(!string.IsNullOrEmpty(field))
-            {
-                sb.Append(field);
-            }
-            sb.Append(tabStr);
-            sb.AppendLine("\t}\n");
-            return sb.ToString();
+            throw new System.NotImplementedException();
         }
 
         public string GenerateNameSpaces()
@@ -189,90 +116,10 @@ namespace AurogonCodeGenerator
             return sb.ToString();
         }
 
-        public string GetTabString()
+        public int GetTabCount()
         {
-            int tabCount = GetTabCount();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < tabCount; i++)
-            {
-                sb.Append("\t");
-            }
-
-            return sb.ToString();
+            return string.IsNullOrEmpty(NameSpace) ? 0 : 1;
         }
-
-
-        public string GenerateScriptName()
-        {
-            string interfaces = GenerateInterfaces();
-            string tabStr = GetTabString();
-            if (string.IsNullOrEmpty(interfaces) && string.IsNullOrEmpty(BaseTypeName))
-            {
-                return $"{tabStr}public class {Name}\n";
-            }
-            else if (string.IsNullOrEmpty(BaseTypeName) && !string.IsNullOrEmpty(interfaces))
-            {
-                return $"{tabStr}public class {Name} : {interfaces}\n";
-            }
-            else if (!string.IsNullOrEmpty(BaseTypeName) && string.IsNullOrEmpty(interfaces))
-            {
-                return $"{tabStr}public class {Name} : {BaseTypeName}\n";
-            }
-            else
-            {
-                return $"{tabStr}public class {Name} : {BaseTypeName},{interfaces}\n";
-            }
-        }
-
-        public string GenerateInterfaces()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(string.Join(",", Interfaces));
-            return sb.ToString();
-        }
-
-        public string GenerateCodeFields()
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (var field in CodeFields)
-            {
-                string fieldCode = field.GenerateCode();
-                if(!string.IsNullOrEmpty(fieldCode))
-                {
-                    sb.AppendLine(fieldCode);
-                }
-            }
-            sb.Append("\n");
-
-            return sb.ToString();
-        }
-
-        public string GenerateCodeFieldsConstruction()
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (var field in CodeFields)
-            {
-                string fieldCode = field.GenerateCodeConstruct();
-                if (!string.IsNullOrEmpty(fieldCode))
-                {
-                    sb.AppendLine(fieldCode);
-                }
-            }
-            return sb.ToString();
-        }
-
-        public string GenerateMethodCode()
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (var codeMethod in Methods)
-            {
-                sb.AppendLine(codeMethod.GenerateCode());
-            }
-
-            return sb.ToString();
-        }
-
-        #endregion
 
         public void GeneratorCodeToSave(string savePath)
         {
@@ -289,6 +136,23 @@ namespace AurogonCodeGenerator
             }
 
             File.WriteAllText(saveFile, code);
+        }
+
+        public void SetNameSpace(string nameSpace)
+        {
+            m_namespace = nameSpace;
+        }
+
+        public string GetTabString()
+        {
+            int tabCount = TabCount;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < tabCount; i++)
+            {
+                sb.Append("\t");
+            }
+
+            return sb.ToString();
         }
     }
 }
