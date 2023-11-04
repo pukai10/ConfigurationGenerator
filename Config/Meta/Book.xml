@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<metalib namespace="AurogonRes" name="Book" version="1.0">
+
+  <struct name="BookCfg" desc="书配置">
+    <property name="ChapterID" type="uint32" cname="章节ID" desc="章节ID" />
+    <property name="ChapterName" type="string" size="64" cname="章节名" desc="章节名" />
+    <property name="ChapterContent" type="string" size="64" cname="章节内容" desc="章节内容" />
+    <property name="ChapterContentTranslate" type="string" size="64" cname="翻译" desc="翻译" />
+  </struct>
+
+</metalib>

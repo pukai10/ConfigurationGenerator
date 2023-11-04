@@ -2,6 +2,7 @@
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
 using NPOI.SS.Formula.Functions;
+using System.Text;
 
 namespace ConfigurationGenerator
 {
@@ -35,7 +36,6 @@ namespace ConfigurationGenerator
 				m_isVaild = false;
 				return;
 			}
-
 			m_cells = new List<Cell[]>();
 			for (int rowIndex = firstRowIndex; rowIndex < lastRowIndex; rowIndex++)
 			{
@@ -163,8 +163,25 @@ namespace ConfigurationGenerator
 			}
 		}
 
-		#endregion
+        #endregion
 
+
+        public override string ToString()
+        {
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine($"SheetName:{SheetName}");
+			for(int i = 0; i < RowNum; i++)
+			{
+				Cell[] cells = this[i];
+				for(int j = 0; j < cells.Length; j++)
+				{
+					sb.Append($"{j}:{cells[j].CellValue} ");
+				}
+				sb.Append("\n");
+			}
+
+			return sb.ToString();
+        }
     }
 }
 

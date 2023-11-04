@@ -4,5 +4,8 @@
     <ExcelNode Name="Game.xlsx" ExcelName="Game.xlsx">
       <ExcelSheetNode name="Game.xlsx- 英雄" sheet="英雄" struct="HeroCfg" binary="./HeroCfg.bytes" meta="./HeroCfg.xml" />
     </ExcelNode>
+    <ExcelNode Name="书.xlsx" ExcelName="书.xlsx">
+      <ExcelSheetNode name="书.xlsx- 道德经" sheet="道德经" struct="BookCfg" binary="./DDJBookCfg.bytes" meta="./Book.xml" />
+    </ExcelNode>
   </ConfigConvertTree>
 </ConvertList>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.ConstrainedExecution;
 
 namespace AurogonTools
 {
@@ -19,23 +20,39 @@ namespace AurogonTools
 
 		private static AurogonVersion m_defaultVersion = null;
 
+		public static string VersionPath = "./version.txt";
+
 		public static void SetVersion(int major,int minor,int patch,int build)
 		{
-			if(m_defaultVersion == null)
-			{
-				m_defaultVersion = new AurogonVersion(major, minor, patch, build);
-			}
-		}
+            SetVersion(new AurogonVersion(major, minor, patch, build));
+        }
 
 		public static void SetVersion(string version)
         {
-            if (m_defaultVersion == null)
+			SetVersion(new AurogonVersion(version));
+        }
+
+		private static void SetVersion(AurogonVersion ver)
+        {
+            if (ver > Default)
             {
-                m_defaultVersion = new AurogonVersion(version);
+                m_defaultVersion = new AurogonVersion(ver.Major, ver.Minor, ver.Patch, ver.Build);
+                IOHelper.SaveFile(VersionPath, m_defaultVersion.Version);
             }
         }
 
-		public static AurogonVersion Default => m_defaultVersion;
+        public static AurogonVersion Default
+        {
+            get
+            {
+                if (m_defaultVersion == null)
+                {
+					m_defaultVersion = new AurogonVersion(IOHelper.ReadFileText(VersionPath));
+				}
+
+				return m_defaultVersion;
+			}
+		}
 
 		public AurogonVersion() : this(0, 0, 0, 0) { }
 		

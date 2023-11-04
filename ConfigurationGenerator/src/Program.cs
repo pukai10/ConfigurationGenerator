@@ -112,6 +112,14 @@ namespace ConfigurationGenerator
 
             logger.Debug(excelPath);
             PrintDirAllFiles(excelPath.SystemPath());
+
+            var files = IOHelper.GetAllFileInfos(excelPath.SystemPath());
+            foreach (var file in files)
+            {
+                ExcelReader excel = new ExcelReader(file.FullName);
+                logger.Debug(excel.ToString());
+            }
+
             string metaPath = configRootPath + config.MetaFilesPath;
 
             logger.Debug(metaPath);

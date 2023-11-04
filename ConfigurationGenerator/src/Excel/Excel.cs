@@ -4,7 +4,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System.Collections.Generic;
-using NPOI.OpenXmlFormats.Spreadsheet;
+using System.Text;
 
 namespace ConfigurationGenerator
 {
@@ -19,8 +19,6 @@ namespace ConfigurationGenerator
 			m_excelName = Path.GetFileName(m_excelPath);
 			InitExcel();
         }
-
-
 
 		private void InitExcel()
 		{
@@ -117,6 +115,21 @@ namespace ConfigurationGenerator
 				return null;
 			}
 		}
+
+        public override string ToString()
+        {
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine($"ExcelName:{m_excelName},Path:{m_excelPath}");
+
+			for(int i = 0; i < SheetNum; i++)
+			{
+				var sheet = this[i];
+				sb.AppendLine(sheet.ToString());
+				sb.AppendLine("");
+			}
+
+			return sb.ToString();
+        }
     }
 
 	public class WorkbookNullException : Exception

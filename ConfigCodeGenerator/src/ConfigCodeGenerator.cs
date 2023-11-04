@@ -36,40 +36,6 @@ namespace ConfigCodeGenerator
 			}
 
 			FileInfo[] infos = IOHelper.GetAllFileInfos(MetaPath);
-
-
-            // CSharpCodeGenerator codeGenerator = new CSharpCodeGenerator("Story");
-            // codeGenerator.AddNameSpace("System");
-            //// codeGenerator.SetNameSpace("AurogonRes");
-            // codeGenerator.AddInterface("IPackage");
-            // codeGenerator.AddProperty("ID", typeof(uint).Name, 3);
-            // codeGenerator.AddProperty("ID2", typeof(int).Name);
-            // codeGenerator.AddField("ID3", typeof(ushort).Name);
-            // codeGenerator.AddProperty("ID4", typeof(short).Name, 2);
-            // codeGenerator.AddField("ID5", typeof(byte).Name);
-            // codeGenerator.AddField("ID6", typeof(sbyte).Name);
-            // codeGenerator.AddField("ID7", typeof(ulong).Name);
-            // codeGenerator.AddProperty("ID8", typeof(long).Name);
-            // codeGenerator.AddProperty("Name", typeof(string).Name, 6);
-            // codeGenerator.AddProperty("IsOpen", typeof(bool).Name, 1);
-            // codeGenerator.AddProperty("Speed", typeof(float).Name);
-            // codeGenerator.AddProperty("Speed2", typeof(double).Name);
-            // codeGenerator.AddProperty("stAwardInfo", "AwardInfo");
-
-            // var fields = codeGenerator.CodeFields;
-            // int tabCount = codeGenerator.GetTabCount();
-            // PackStatement statement = new PackStatement(tabCount + 2, fields);
-            // UnPackStatement unStatement = new UnPackStatement(tabCount + 2, fields);
-
-            // logger.Debug(statement.GenerateCode());
-
-            // PackMethod packMethod = new PackMethod("Pack", statement.GenerateCode(),tabCount + 1);
-            // UnPackMethod unPackMethod = new UnPackMethod("UnPack", unStatement.GenerateCode(),tabCount + 1);
-
-            // codeGenerator.AddMethod(packMethod);
-            // codeGenerator.AddMethod(unPackMethod);
-
-            // codeGenerator.GeneratorCodeToSave(AppDomain.CurrentDomain.BaseDirectory);
             foreach (var file in infos)
 			{
 				m_logger.Info(file.FullName);
@@ -97,7 +63,7 @@ namespace ConfigCodeGenerator
 
                     codeGenerator.AddClass(csharpClass);
 				}
-
+				m_logger.Info(codeGenerator.Name);
                 codeGenerator.GeneratorCodeToSave(AppDomain.CurrentDomain.BaseDirectory);
             }
 		}
