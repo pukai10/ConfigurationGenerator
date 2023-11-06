@@ -3,11 +3,11 @@ namespace AurogonTools
 {
     public interface ILogger
     {
-        void Info(string content);
-        void Debug(string content);
-        void Warning(string content);
-        void Error(string content);
-        void Fatal(string content);
+        void Info<T>(T content);
+        void Debug<T>(T content);
+        void Warning<T>(T content);
+        void Error<T>(T content);
+        void Fatal<T>(T content);
 
         LoggerSetting loggerSetting { get; set; }
     }

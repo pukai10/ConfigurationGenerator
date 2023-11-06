@@ -4,7 +4,7 @@ using AurogonTools;
 using System.IO;
 using AurogonXmlConvert;
 using AurogonCodeGenerator;
-
+using GameConfigurationMode;
 
 namespace ConfigCodeGenerator
 {

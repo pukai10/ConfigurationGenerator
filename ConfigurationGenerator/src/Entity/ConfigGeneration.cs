@@ -14,8 +14,11 @@ namespace ConfigurationGenerator
 		[XmlAttributionName("ExcelFilePath")]
 		public string ExcelFilesPath { get; set; }
 
-        [XmlChildNodeList("ConfigConvertTree", typeof(ConfigConvertTree))]
-        public List<ConfigConvertTree> ConvertTree { get; set; }
+		[XmlAttributionName("ExportFilePath")]
+		public string ExportFilePath { get; set; }
+
+		[XmlNodeName("ConfigConvertTree", typeof(ConfigConvertTree))]
+        public ConfigConvertTree ConvertTree { get; set; }
 
 		public override string ToString()
 		{
@@ -25,10 +28,7 @@ namespace ConfigurationGenerator
 			sb.AppendLine($"MetaFilesPath:{MetaFilesPath}");
 			sb.AppendLine($"ExcelFilesPath:{ExcelFilesPath}");
 
-            foreach (var tree in ConvertTree)
-            {
-				sb.AppendLine(tree.ToString());
-            }
+			sb.AppendLine(ConvertTree.ToString());
 
 			return sb.ToString();
 		}
@@ -55,7 +55,6 @@ namespace ConfigurationGenerator
 			return sb.ToString();
 		}
 	}
-
 
 	[XmlNodeName("ExcelNode",typeof(ExcelNode))]
 	public class ExcelNode

@@ -154,6 +154,25 @@ project "CommandLineOption"
         "CommandLineOption/src/**.cs"
     }
 
+project "GameConfigurationMode"
+    location "GameConfigurationMode"
+    language "C#"
+    kind "SharedLib"
+    
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    links 
+    {
+        "AurogonXmlConvert",
+        "System.Xml"
+    }
+
+    files 
+    {
+        "GameConfigurationMode/src/**.cs"
+    }
+
 project "ConfigurationGenerator"
     location "ConfigurationGenerator"
     kind "ConsoleApp"
@@ -166,8 +185,8 @@ project "ConfigurationGenerator"
     {
         "CommandLineOption",
         "AurogonTools",
-        "AurogonCodeGenerator",
         "AurogonXmlConvert",
+        "GameConfigurationMode",
         "System.Xml"
     }
 
@@ -193,9 +212,9 @@ project "ConfigCodeGenerator"
     {
         "CommandLineOption",
         "AurogonTools",
-        "AurogonCodeGenerator",
         "AurogonXmlConvert",
         "AurogonCodeGenerator",
+        "GameConfigurationMode",
         "System.Xml"
     }
 

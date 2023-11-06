@@ -47,7 +47,7 @@ namespace AurogonTools
             {
                 if (m_defaultVersion == null)
                 {
-					m_defaultVersion = new AurogonVersion(IOHelper.ReadFileText(VersionPath));
+					m_defaultVersion = new AurogonVersion(IOHelper.ReadFileText(VersionPath, true, "0.0.0.0"));
 				}
 
 				return m_defaultVersion;

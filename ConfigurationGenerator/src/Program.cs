@@ -1,17 +1,17 @@
 using System;
 using CommandLineOption;
 using AurogonTools;
-using AurogonCodeGenerator;
 using AurogonXmlConvert;
 using System.IO;
+using System.Collections.Generic;
+using GameConfigurationMode;
 
 namespace ConfigurationGenerator
 {
     class Program
     {
 
-        private static string Version = "0.1";
-
+        private static ILogger logger = null;
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
@@ -21,7 +21,8 @@ namespace ConfigurationGenerator
                 "--path",
                 "..\\..\\..\\Config\\GameConfigConvert.xml"
             };
-            ILogger logger = Logger.GetLogger(new LoggerSetting() { logType = LogType.All });
+            AurogonVersion.SetVersion(Common.Version);
+            logger = Logger.GetLogger(new LoggerSetting() { logType = LogType.All });
 
             //Setting setting = CommandLineParser.Default.Parse<Setting>(args,false);
 
@@ -104,48 +105,112 @@ namespace ConfigurationGenerator
             path = path.SystemPath();
             ConfigGeneration config = XmlUtility.FromXml<ConfigGeneration>(path);
 
-            logger.Info(config.ToString());
-
+            logger.Debug(config.ToString());
             string configRootPath = Path.GetDirectoryName(path);
+            Dictionary<string, ExportGameConfig> exports = ConvertExportGameConfigInfos(config, configRootPath);
 
             string excelPath = configRootPath + config.ExcelFilesPath;
-
-            logger.Debug(excelPath);
-            PrintDirAllFiles(excelPath.SystemPath());
-
-            var files = IOHelper.GetAllFileInfos(excelPath.SystemPath());
-            foreach (var file in files)
-            {
-                ExcelReader excel = new ExcelReader(file.FullName);
-                logger.Debug(excel.ToString());
-            }
-
             string metaPath = configRootPath + config.MetaFilesPath;
+            logger.Debug($"metaPath:{metaPath}");
+            logger.Debug($"excelPath:{excelPath}");
 
-            logger.Debug(metaPath);
-            PrintDirAllFiles(metaPath.SystemPath());
+            //foreach (var export in exports.Values)
+            //{
+            //    ExcelReader excel = new ExcelReader(export.ExcelFile);
+            //    for (int i = 0; i < export.ExportList.Count; i++)
+            //    {
+            //        var exportInfo = export.ExportList[i];
+            //        var sheet = excel[exportInfo.SheetName];
+            //        if (sheet == null)
+            //        {
+            //            logger.Error($"{excel.ExcelName} not has sheet:{exportInfo.SheetName}");
+            //            return;
+            //        }
+
+            //        var configMeta = XmlUtility.FromXml<ConfigMeta>(exportInfo.MetaFilePath);
+
+            //        if (configMeta == null)
+            //        {
+            //            logger.Error($"{exportInfo.MetaFilePath} convert to ConfigMeta struct error,please check it");
+            //            return;
+            //        }
+
+            //        exportInfo.exportRowInfoList = new List<ExportGameConfigRowInfo>();
+
+            //        ExportGameConfigRowInfo info = new ExportGameConfigRowInfo();
+
+            //        ConfigStruct configStruct = configMeta[exportInfo.StructName];
+            //    }
+            //}
+
+
 
             if (configSetting.HelpText)
             {
                 Console.WriteLine(CommandLineParser.GetAllOptionHelpText());
             }
 
-            if(configSetting.Version)
+            if (configSetting.Version)
             {
-                Console.WriteLine($"ConfigurationGenerator:{Version}");
+                Console.WriteLine($"ConfigurationGenerator:{AurogonVersion.Default.Version}");
             }
 
             Console.ReadKey();
         }
 
-        private static void PrintDirAllFiles(string path)
+        private static Dictionary<string, ExportGameConfig> ConvertExportGameConfigInfos(ConfigGeneration config, string configPath)
         {
-            DirectoryInfo info = new DirectoryInfo(path);
-            var files = info.GetFiles("*.*",SearchOption.AllDirectories);
-            foreach (var file in files)
+            if (config == null || config.ConvertTree == null)
             {
-                Console.WriteLine(file.FullName);
+                return null;
             }
+            Dictionary<string, ExportGameConfig> dict = new Dictionary<string, ExportGameConfig>();
+            ConfigConvertTree tree = config.ConvertTree;
+            if (tree == null || tree.ExcelNodes == null)
+            {
+                return null;
+            }
+
+            for (int j = 0; j < tree.ExcelNodes.Count; j++)
+            {
+                var node = tree.ExcelNodes[j];
+                if (node == null || node.SheetNodes == null)
+                {
+                    continue;
+                }
+
+                ExportGameConfig export = null;
+                if (!dict.TryGetValue(node.Name, out export))
+                {
+                    export = new ExportGameConfig();
+                    export.ExcelFile = IOHelper.ConvertPath(configPath, config.ExcelFilesPath, node.ExcelName);
+                    export.ExportList = new List<ExportGameConfigInfo>();
+                }
+
+                for (int i = 0; i < node.SheetNodes.Count; i++)
+                {
+                    var sheetNode = node.SheetNodes[i];
+                    if (sheetNode == null)
+                    {
+                        continue;
+                    }
+
+                    ExportGameConfigInfo info = new ExportGameConfigInfo();
+                    info.ExcelName = node.ExcelName;
+                    info.ExportBytesPath = IOHelper.ConvertPath(configPath, config.ExportFilePath, sheetNode.BinaryFile);
+                    info.MetaFilePath = IOHelper.ConvertPath(configPath, config.MetaFilesPath, sheetNode.MetaFile);
+                    info.StructName = sheetNode.StructName;
+                    info.SheetName = sheetNode.SheetName;
+
+                    export.AddExportInfo(info);
+                }
+
+                dict[node.ExcelName] = export;
+
+                logger.Debug(export.ToString());
+            }
+
+            return dict;
         }
 
         private static void OnReigisterLogCallBack(string content, LogType logType, string stackTrace)

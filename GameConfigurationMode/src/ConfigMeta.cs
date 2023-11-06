@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using AurogonXmlConvert;
 
-namespace ConfigCodeGenerator
+namespace GameConfigurationMode
 {
 	[XmlNodeName("metalib",typeof(ConfigMeta))]
 	public class ConfigMeta
@@ -19,6 +19,30 @@ namespace ConfigCodeGenerator
 
 		[XmlChildNodeList("struct",typeof(ConfigStruct))]
 		public List<ConfigStruct> Structs { get; set; }
+
+		public ConfigStruct this[string structName]
+		{
+			get
+			{
+				if (Structs == null)
+				{
+					return null;
+				}
+
+				for (int i = 0; i < Structs.Count; i++)
+				{
+					var str = Structs[i];
+					if (str != null && str.Name == structName)
+					{
+						return str;
+					}
+				}
+
+				return null;
+			}
+
+		}
+
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
@@ -44,7 +68,29 @@ namespace ConfigCodeGenerator
 		[XmlChildNodeList("property",typeof(StructProperty))]
 		public List<StructProperty> Properties { get; set; }
 
-        public override string ToString()
+		public StructProperty this[string name]
+		{
+			get
+			{
+				if (Properties == null)
+				{
+					return null;
+				}
+
+				for (int i = 0; i < Properties.Count; i++)
+				{
+					StructProperty prop = Properties[i];
+					if (prop != null && prop.CName == name)
+					{
+						return prop;
+					}
+				}
+
+				return null;
+			}
+		}
+
+		public override string ToString()
         {
 			StringBuilder sb = new StringBuilder();
 			sb.AppendLine($"Name:{Name} Desc:{Desc}");

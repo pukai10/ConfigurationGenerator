@@ -11,7 +11,10 @@ namespace ConfigurationGenerator
 	public class ExcelReader
 	{
 		private string m_excelPath;
+		public string ExcelPath => m_excelPath;
 		private string m_excelName;
+		public string ExcelName => m_excelName;
+
 		private List<Sheet> m_sheets;
 		public ExcelReader(string excelPath)
 		{
@@ -35,7 +38,6 @@ namespace ConfigurationGenerator
 			string extension = Path.GetExtension(m_excelPath);
 
 			FileStream fs = new FileStream(m_excelPath, FileMode.Open, FileAccess.Read);
-			Console.WriteLine(extension);
             IWorkbook workbook = null;
 			switch(extension)
 			{

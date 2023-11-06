@@ -114,29 +114,29 @@ namespace AurogonTools
             ClearAndReCreateFile();
         }
 
-        public void Debug(string content)
+        public void Debug<T>(T content)
         {
-            PrintLog(content,LogType.Debug);
+            PrintLog(content.ToString(),LogType.Debug);
         }
 
-        public void Error(string content)
+        public void Error<T>(T content)
         {
-            PrintLog(content,LogType.Error);
+            PrintLog(content.ToString(), LogType.Error);
         }
 
-        public void Fatal(string content)
+        public void Fatal<T>(T content)
         {
-            PrintLog(content,LogType.Fatal);
+            PrintLog(content.ToString(), LogType.Fatal);
         }
 
-        public void Info(string content)
+        public void Info<T>(T content)
         {
-            PrintLog(content,LogType.Info);
+            PrintLog(content.ToString(), LogType.Info);
         }
 
-        public void Warning(string content)
+        public void Warning<T>(T content)
         {
-            PrintLog(content,LogType.Warning);
+            PrintLog(content.ToString(), LogType.Warning);
         }
 
         private void PrintLog(string content,LogType logType)

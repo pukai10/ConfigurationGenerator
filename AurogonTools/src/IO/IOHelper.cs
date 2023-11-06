@@ -22,6 +22,16 @@ namespace AurogonTools
             return path;
         }
 
+        public static string ConvertPath(params string[] args)
+        {
+            if(args != null)
+            {
+                return SystemPath(string.Join("/", args));
+            }
+
+            return string.Empty;
+        }
+
         public static void SaveFile(string path,string content)
         {
             path = SystemPath(path);
@@ -44,7 +54,7 @@ namespace AurogonTools
             File.WriteAllBytes(path, datas);
         }
 
-        public static string ReadFileText(string path,bool create = false)
+        public static string ReadFileText(string path,bool create = false,string defaultContent = "")
         {
             path = SystemPath(path);
             if (File.Exists(path) == false)
@@ -54,13 +64,13 @@ namespace AurogonTools
                     throw new System.Exception("文件不存在：" + path);
                 }
 
-                File.WriteAllText(path, string.Empty);
+                File.WriteAllText(path, defaultContent);
             }
 
             return File.ReadAllText(path);
         }
 
-        public static byte[] ReadFileBytes(string path, bool create = false)
+        public static byte[] ReadFileBytes(string path, bool create = false, string defaultContent = "")
         {
             path = SystemPath(path);
             if (File.Exists(path) == false)
@@ -70,7 +80,7 @@ namespace AurogonTools
                     throw new System.Exception("文件不存在：" + path);
                 }
 
-                File.WriteAllText(path, string.Empty);
+                File.WriteAllText(path, defaultContent);
             }
 
             return File.ReadAllBytes(path);
