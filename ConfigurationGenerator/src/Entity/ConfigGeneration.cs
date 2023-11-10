@@ -5,9 +5,9 @@ using System.Text;
 
 namespace ConfigurationGenerator
 {
-	[XmlNodeName("ConvertList", typeof(ConfigGeneration))]
-	public class ConfigGeneration
-    {
+	[XmlNodeName("ConvertList", typeof(GameConfigConvert))]
+	public class GameConfigConvert
+	{
         [XmlAttributionName("MetaFilePath")]
         public string MetaFilesPath { get; set; }
 

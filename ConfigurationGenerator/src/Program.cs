@@ -11,7 +11,6 @@ namespace ConfigurationGenerator
     class Program
     {
 
-        private static ILogger logger = null;
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
@@ -22,7 +21,62 @@ namespace ConfigurationGenerator
                 "..\\..\\..\\Config\\GameConfigConvert.xml"
             };
             AurogonVersion.SetVersion(Common.Version);
-            logger = Logger.GetLogger(new LoggerSetting() { logType = LogType.All });
+
+            ConfigurationSetting configSetting = CommandLineParser.Default.Parse<ConfigurationSetting>(args, true);
+            ConfigurationConvert configurationConvert = new ConfigurationConvert(configSetting);
+            configurationConvert.Convert();
+
+        //    OutMessages msgs = new OutMessages("ConfigurationConvert");
+
+        //    msgs.AddMsg("Info ≤‚ ‘1");
+        //    msgs.AddMsg("Warning ≤‚ ‘1", OutMsgType.Warning);
+        //    msgs.AddMsg("Info ≤‚ ‘2");
+        //    msgs.AddMsg("Info ≤‚ ‘3");
+        //    msgs.AddMsg("Error ≤‚ ‘1", OutMsgType.Error);
+        //    msgs.AddMsg("Warning ≤‚ ‘2", OutMsgType.Warning);
+        //    msgs.AddMsg("Info ≤‚ ‘4");
+        //    msgs.AddMsg("Error ≤‚ ‘2", OutMsgType.Error);
+        //    msgs.AddMsg("Info ≤‚ ‘5");
+        //    msgs.AddMsg("Error ≤‚ ‘3", OutMsgType.Error);
+        //    msgs.AddMsg("Warning ≤‚ ‘3", OutMsgType.Warning);
+        //    msgs.AddMsg("Info ≤‚ ‘5");
+        //    msgs.AddMsg("Info ≤‚ ‘7");
+        //    msgs.AddMsg("Error ≤‚ ‘4", OutMsgType.Error);
+        //    msgs.AddMsg("Warning ≤‚ ‘4", OutMsgType.Warning);
+        //    msgs.AddMsg("Info ≤‚ ‘8");
+        //    msgs.AddMsg("Info ≤‚ ‘9");
+        //    msgs.AddMsg("Error ≤‚ ‘5", OutMsgType.Error);
+        //    msgs.AddMsg("Warning ≤‚ ‘5", OutMsgType.Warning);
+        //    msgs.AddMsg("Error ≤‚ ‘6", OutMsgType.Error);
+
+
+        //    System.Action<List<OutMessage>> action = (List<OutMessage> msg) =>
+        //{
+        //    for (int i = 0; i < msg.Count; i++)
+        //    {
+        //        Console.WriteLine(msg[i].ToString());
+        //    }
+        //};
+
+        //    var infoMsgs = msgs.InfoMsgs();
+        //    Console.WriteLine("InfoMsgs");
+
+        //    action(infoMsgs);
+
+        //    Console.WriteLine("WarningMsgs");
+        //    var waringMsgs = msgs.WarningMsgs();
+        //    action(waringMsgs);
+
+        //    Console.WriteLine("ErrorMsgs");
+        //    var errors = msgs.ErrorMsgs();
+        //    action(errors);
+
+
+
+
+
+
+            //logger = Logger.GetLogger(new LoggerSetting() { logType = LogType.All });
 
             //Setting setting = CommandLineParser.Default.Parse<Setting>(args,false);
 
@@ -99,20 +153,19 @@ namespace ConfigurationGenerator
             //logger.Info(config.ToString());
 
 
-            ConfigurationSetting configSetting = CommandLineParser.Default.Parse<ConfigurationSetting>(args, true);
 
-            string path = AppDomain.CurrentDomain.BaseDirectory + configSetting.ConfigConvertFilePath;
-            path = path.SystemPath();
-            ConfigGeneration config = XmlUtility.FromXml<ConfigGeneration>(path);
+            //string path = AppDomain.CurrentDomain.BaseDirectory + configSetting.ConfigConvertFilePath;
+            //path = path.SystemPath();
+            //ConfigGeneration config = XmlUtility.FromXml<ConfigGeneration>(path);
 
-            logger.Debug(config.ToString());
-            string configRootPath = Path.GetDirectoryName(path);
-            Dictionary<string, ExportGameConfig> exports = ConvertExportGameConfigInfos(config, configRootPath);
+            //logger.Debug(config.ToString());
+            //string configRootPath = Path.GetDirectoryName(path);
+            //Dictionary<string, ExportGameConfig> exports = ConvertExportGameConfigInfos(config, configRootPath);
 
-            string excelPath = configRootPath + config.ExcelFilesPath;
-            string metaPath = configRootPath + config.MetaFilesPath;
-            logger.Debug($"metaPath:{metaPath}");
-            logger.Debug($"excelPath:{excelPath}");
+            //string excelPath = configRootPath + config.ExcelFilesPath;
+            //string metaPath = configRootPath + config.MetaFilesPath;
+            //logger.Debug($"metaPath:{metaPath}");
+            //logger.Debug($"excelPath:{excelPath}");
 
             //foreach (var export in exports.Values)
             //{
@@ -158,65 +211,65 @@ namespace ConfigurationGenerator
             Console.ReadKey();
         }
 
-        private static Dictionary<string, ExportGameConfig> ConvertExportGameConfigInfos(ConfigGeneration config, string configPath)
-        {
-            if (config == null || config.ConvertTree == null)
-            {
-                return null;
-            }
-            Dictionary<string, ExportGameConfig> dict = new Dictionary<string, ExportGameConfig>();
-            ConfigConvertTree tree = config.ConvertTree;
-            if (tree == null || tree.ExcelNodes == null)
-            {
-                return null;
-            }
+        //private static Dictionary<string, ExportGameConfig> ConvertExportGameConfigInfos(ConfigGeneration config, string configPath)
+        //{
+        //    if (config == null || config.ConvertTree == null)
+        //    {
+        //        return null;
+        //    }
+        //    Dictionary<string, ExportGameConfig> dict = new Dictionary<string, ExportGameConfig>();
+        //    ConfigConvertTree tree = config.ConvertTree;
+        //    if (tree == null || tree.ExcelNodes == null)
+        //    {
+        //        return null;
+        //    }
 
-            for (int j = 0; j < tree.ExcelNodes.Count; j++)
-            {
-                var node = tree.ExcelNodes[j];
-                if (node == null || node.SheetNodes == null)
-                {
-                    continue;
-                }
+        //    for (int j = 0; j < tree.ExcelNodes.Count; j++)
+        //    {
+        //        var node = tree.ExcelNodes[j];
+        //        if (node == null || node.SheetNodes == null)
+        //        {
+        //            continue;
+        //        }
 
-                ExportGameConfig export = null;
-                if (!dict.TryGetValue(node.Name, out export))
-                {
-                    export = new ExportGameConfig();
-                    export.ExcelFile = IOHelper.ConvertPath(configPath, config.ExcelFilesPath, node.ExcelName);
-                    export.ExportList = new List<ExportGameConfigInfo>();
-                }
+        //        ExportGameConfig export = null;
+        //        if (!dict.TryGetValue(node.Name, out export))
+        //        {
+        //            export = new ExportGameConfig();
+        //            export.ExcelFile = IOHelper.ConvertPath(configPath, config.ExcelFilesPath, node.ExcelName);
+        //            export.ExportList = new List<ExportGameConfigInfo>();
+        //        }
 
-                for (int i = 0; i < node.SheetNodes.Count; i++)
-                {
-                    var sheetNode = node.SheetNodes[i];
-                    if (sheetNode == null)
-                    {
-                        continue;
-                    }
+        //        for (int i = 0; i < node.SheetNodes.Count; i++)
+        //        {
+        //            var sheetNode = node.SheetNodes[i];
+        //            if (sheetNode == null)
+        //            {
+        //                continue;
+        //            }
 
-                    ExportGameConfigInfo info = new ExportGameConfigInfo();
-                    info.ExcelName = node.ExcelName;
-                    info.ExportBytesPath = IOHelper.ConvertPath(configPath, config.ExportFilePath, sheetNode.BinaryFile);
-                    info.MetaFilePath = IOHelper.ConvertPath(configPath, config.MetaFilesPath, sheetNode.MetaFile);
-                    info.StructName = sheetNode.StructName;
-                    info.SheetName = sheetNode.SheetName;
+        //            ExportGameConfigInfo info = new ExportGameConfigInfo();
+        //            info.ExcelName = node.ExcelName;
+        //            info.ExportBytesPath = IOHelper.ConvertPath(configPath, config.ExportFilePath, sheetNode.BinaryFile);
+        //            info.MetaFilePath = IOHelper.ConvertPath(configPath, config.MetaFilesPath, sheetNode.MetaFile);
+        //            info.StructName = sheetNode.StructName;
+        //            info.SheetName = sheetNode.SheetName;
 
-                    export.AddExportInfo(info);
-                }
+        //            export.AddExportInfo(info);
+        //        }
 
-                dict[node.ExcelName] = export;
+        //        dict[node.ExcelName] = export;
 
-                logger.Debug(export.ToString());
-            }
+        //        logger.Debug(export.ToString());
+        //    }
 
-            return dict;
-        }
+        //    return dict;
+        //}
 
-        private static void OnReigisterLogCallBack(string content, LogType logType, string stackTrace)
-        {
-            Console.WriteLine(content, logType, stackTrace);
-        }
+        //private static void OnReigisterLogCallBack(string content, LogType logType, string stackTrace)
+        //{
+        //    Console.WriteLine(content, logType, stackTrace);
+        //}
     }
 
 }
