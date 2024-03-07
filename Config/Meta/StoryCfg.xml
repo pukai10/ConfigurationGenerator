@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<metalib namespace="AurogonRes" name="Book" version="1.0">
+
+  <struct name="ChapterStoryOptionCfg" desc="选项">
+    <property name="Content" type="string" size="128" cname="内容" desc="内容" />
+    <property name="JumpID" type="uint16" cname="跳转ID" desc="跳转ID" />
+  </struct>
+
+  <struct name="ChapterStoryCfg" desc="剧情">
+    <property name="ChapterID" type="uint32" cname="剧情ID" desc="剧情ID" />
+    <property name="DialogueID" type="uint16" cname="对话ID" desc="对话ID" />
+    <property name="HeroID" type="uint32" cname="英雄ID" desc="英雄ID" />
+    <property name="DialogueContent" type="string" size="1024" cname="对话内容" desc="对话内容" />
+    <property name="JumpDialogueID" type="uint16" cname="跳转对话ID" desc="跳转对话ID" />
+    <property name="IsOptionDialogue" type="uint8" cname="是否包含选项" desc="是否包含选项" />
+    <property name="DialogueOptions" type="ChapterStoryOptionCfg" cname="选项" desc="选项" />
+    <property name="IsEnd" type="uint8" cname="对话结束" desc="对话结束" />
+  </struct>
+
+</metalib>
