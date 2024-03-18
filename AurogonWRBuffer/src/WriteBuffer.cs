@@ -27,7 +27,7 @@ namespace AurogonWRBuffer
 
         public int GetLeftLength()
         {
-            return Position - Length;
+            return Length - Position;
         }
 
         public void DisableEndian()

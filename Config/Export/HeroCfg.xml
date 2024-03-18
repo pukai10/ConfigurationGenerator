@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<HeroCfg>
+  <ID>1001</ID>
+  <Name>刘备</Name>
+  <Name>刘备简介</Name>
+  <SkillList>10001</SkillList>
+  <SkillList>10002</SkillList>
+  <SkillList>10003</SkillList>
+  <ID>1002</ID>
+  <Name>关羽</Name>
+  <Name>关羽简介</Name>
+  <SkillList>20001</SkillList>
+  <SkillList>20002</SkillList>
+  <SkillList>20003</SkillList>
+  <ID>1003</ID>
+  <Name>张飞</Name>
+  <Name>张飞简介</Name>
+  <SkillList>30001</SkillList>
+  <SkillList>30002</SkillList>
+  <SkillList>30003</SkillList>
+</HeroCfg>

@@ -27,16 +27,6 @@ namespace ConfigurationGenerator
         /// 表中列头的名字
         /// </summary>
         public string TitleName { get; set; }
-
-        /// <summary>
-        /// 字符串size
-        /// </summary>
-        public int Size { get; set; }
-
-        /// <summary>
-        /// 数组数量
-        /// </summary>
-        public int Count { get; set; }
         /// <summary>
         /// 描述
         /// </summary>

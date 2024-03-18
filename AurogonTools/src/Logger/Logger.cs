@@ -50,7 +50,7 @@ namespace AurogonTools
 
         public static ILogger GetLogger(Type type)
         {
-            return type == null ? GetLogger() : GetLogger(nameof(type), new LoggerSetting());
+            return type == null ? GetLogger() : GetLogger(type.Name, new LoggerSetting());
         }
 
         public static ILogger GetLogger(string logTag,LoggerSetting setting)
@@ -68,7 +68,7 @@ namespace AurogonTools
 
         public static ILogger GetLogger(Type type, LoggerSetting setting)
         {
-            return type == null ? GetLogger() : GetLogger(nameof(type),setting);
+            return type == null ? GetLogger() : GetLogger(type.Name,setting);
         }
 
         #endregion
@@ -87,7 +87,7 @@ namespace AurogonTools
             {
                 if (string.IsNullOrEmpty(m_logFilePath))
                 {
-                    m_logFilePath = $"{loggerSetting.logPath}\\{m_logTag}{DateTime.Now.ToString("yyyy_MM_dd")}.log";
+                    m_logFilePath = loggerSetting.logPath.ConcatPath($"{m_logTag}{DateTime.Now.ToString("yyyy_MM_dd")}.log");// $"{loggerSetting.logPath}{m_logTag}{DateTime.Now.ToString("yyyy_MM_dd")}.log";
                 }
 
                 return m_logFilePath;

@@ -5,11 +5,18 @@ namespace ConfigurationGenerator
 
     public class ConfigurationSetting
     {
-        [Option("P", "path", helpText = "配置转换文件路径", required = true)]
+        [Option("C", "config-file", helpText = "配置转换文件路径", required = true)]
         public string ConfigConvertFilePath
         {
             get { return m_configConvertFilePath; }
             set { m_configConvertFilePath = value; }
+        }
+
+        [Option("R","root-path",helpText ="配置文件根目录", required = true)]
+        public string ConfigRootPath
+        {
+            get;
+            set;
         }
 
         [Option("h","help",helpText ="所有命令的说明")]

@@ -1,10 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <metalib namespace="AurogonRes" name="Hero" version="1.0">
 
+  <constant name="HEROR_SKILL_MAX_COUNT" value="3" />
+
   <struct name="HeroCfg" desc="英雄配置">
     <property name="ID" type="uint32" cname="ID" desc="hero id" />
-    <property name="Name" type="string" size="64" cname="Name" desc="hero name" />
-    <property name="SkillList" type="uint32" count="5" cname="Skill" desc="hero skill" />
+    <property name="Name" type="string" size="64" cname="名字" desc="名字" />
+    <property name="Name" type="string" size="64" cname="简介" desc="简介" />
+    <property name="SkillList" type="uint32" count="HEROR_SKILL_MAX_COUNT" cname="技能" desc="技能" />
   </struct>
 
   <struct name="HeroAttributeCfg" desc="英雄属性配置">

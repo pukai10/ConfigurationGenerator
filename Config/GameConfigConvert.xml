@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ConvertList MetaFilePath="/Meta" ExcelFilePath="/Excel" ExportFilePath="/Export">
+<ConvertList MetaFilePath="Meta" ExcelFilePath="Excel" ExportFilePath="Export">
   <ConfigConvertTree Name="配置列表">
-    <ExcelNode Name="Game.xlsx" ExcelName="Game.xlsx">
-      <ExcelSheetNode name="Game.xlsx- 英雄" sheet="英雄" struct="HeroCfg" binary="HeroCfg.bytes" meta="HeroCfg.xml" />
+    <ExcelNode Name="Character.xlsx" ExcelName="Character.xlsx">
+      <ExcelSheetNode name="Character.xlsx- 英雄" sheet="英雄" struct="HeroCfg" binary="HeroCfg.bytes" meta="HeroCfg.xml" excel="Character.xlsx"/>
     </ExcelNode>
     <ExcelNode Name="Story.xlsx" ExcelName="Story.xlsx">
-      <ExcelSheetNode name="Story.xlsx- 剧情" sheet="剧情" struct="ChapterStoryCfg" binary="ChapterStoryCfg.bytes" meta="StoryCfg.xml" />
+      <ExcelSheetNode name="Story.xlsx- 剧情" sheet="剧情" struct="ChapterStoryCfg" binary="ChapterStoryCfg.bytes" meta="StoryCfg.xml" excel="Story.xlsx"/>
     </ExcelNode>
   </ConfigConvertTree>
 </ConvertList>

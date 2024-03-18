@@ -17,8 +17,11 @@ namespace ConfigurationGenerator
 
             args = new string[]
             {
-                "--path",
-                "..\\..\\..\\Config\\GameConfigConvert.xml"
+                //"--root-path",
+                "-R",
+                "\\Users\\aurogonpu\\Dev\\ConfigurationGenerator\\Config",
+                "--config-file",
+                "GameConfigConvert.xml"
             };
             AurogonVersion.SetVersion(Common.Version);
 
@@ -28,26 +31,26 @@ namespace ConfigurationGenerator
 
         //    OutMessages msgs = new OutMessages("ConfigurationConvert");
 
-        //    msgs.AddMsg("Info ²âÊÔ1");
-        //    msgs.AddMsg("Warning ²âÊÔ1", OutMsgType.Warning);
-        //    msgs.AddMsg("Info ²âÊÔ2");
-        //    msgs.AddMsg("Info ²âÊÔ3");
-        //    msgs.AddMsg("Error ²âÊÔ1", OutMsgType.Error);
-        //    msgs.AddMsg("Warning ²âÊÔ2", OutMsgType.Warning);
-        //    msgs.AddMsg("Info ²âÊÔ4");
-        //    msgs.AddMsg("Error ²âÊÔ2", OutMsgType.Error);
-        //    msgs.AddMsg("Info ²âÊÔ5");
-        //    msgs.AddMsg("Error ²âÊÔ3", OutMsgType.Error);
-        //    msgs.AddMsg("Warning ²âÊÔ3", OutMsgType.Warning);
-        //    msgs.AddMsg("Info ²âÊÔ5");
-        //    msgs.AddMsg("Info ²âÊÔ7");
-        //    msgs.AddMsg("Error ²âÊÔ4", OutMsgType.Error);
-        //    msgs.AddMsg("Warning ²âÊÔ4", OutMsgType.Warning);
-        //    msgs.AddMsg("Info ²âÊÔ8");
-        //    msgs.AddMsg("Info ²âÊÔ9");
-        //    msgs.AddMsg("Error ²âÊÔ5", OutMsgType.Error);
-        //    msgs.AddMsg("Warning ²âÊÔ5", OutMsgType.Warning);
-        //    msgs.AddMsg("Error ²âÊÔ6", OutMsgType.Error);
+        //    msgs.AddMsg("Info ï¿½ï¿½ï¿½ï¿½1");
+        //    msgs.AddMsg("Warning ï¿½ï¿½ï¿½ï¿½1", OutMsgType.Warning);
+        //    msgs.AddMsg("Info ï¿½ï¿½ï¿½ï¿½2");
+        //    msgs.AddMsg("Info ï¿½ï¿½ï¿½ï¿½3");
+        //    msgs.AddMsg("Error ï¿½ï¿½ï¿½ï¿½1", OutMsgType.Error);
+        //    msgs.AddMsg("Warning ï¿½ï¿½ï¿½ï¿½2", OutMsgType.Warning);
+        //    msgs.AddMsg("Info ï¿½ï¿½ï¿½ï¿½4");
+        //    msgs.AddMsg("Error ï¿½ï¿½ï¿½ï¿½2", OutMsgType.Error);
+        //    msgs.AddMsg("Info ï¿½ï¿½ï¿½ï¿½5");
+        //    msgs.AddMsg("Error ï¿½ï¿½ï¿½ï¿½3", OutMsgType.Error);
+        //    msgs.AddMsg("Warning ï¿½ï¿½ï¿½ï¿½3", OutMsgType.Warning);
+        //    msgs.AddMsg("Info ï¿½ï¿½ï¿½ï¿½5");
+        //    msgs.AddMsg("Info ï¿½ï¿½ï¿½ï¿½7");
+        //    msgs.AddMsg("Error ï¿½ï¿½ï¿½ï¿½4", OutMsgType.Error);
+        //    msgs.AddMsg("Warning ï¿½ï¿½ï¿½ï¿½4", OutMsgType.Warning);
+        //    msgs.AddMsg("Info ï¿½ï¿½ï¿½ï¿½8");
+        //    msgs.AddMsg("Info ï¿½ï¿½ï¿½ï¿½9");
+        //    msgs.AddMsg("Error ï¿½ï¿½ï¿½ï¿½5", OutMsgType.Error);
+        //    msgs.AddMsg("Warning ï¿½ï¿½ï¿½ï¿½5", OutMsgType.Warning);
+        //    msgs.AddMsg("Error ï¿½ï¿½ï¿½ï¿½6", OutMsgType.Error);
 
 
         //    System.Action<List<OutMessage>> action = (List<OutMessage> msg) =>

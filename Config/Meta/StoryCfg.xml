@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<metalib namespace="AurogonRes" name="Book" version="1.0">
+<metalib namespace="AurogonRes" name="StoryCfg" version="1.0">
+
+  <constant name="CHAPTER_STORY_OPTION_MAX_COUNT" value="3" />
 
   <struct name="ChapterStoryOptionCfg" desc="选项">
     <property name="Content" type="string" size="128" cname="内容" desc="内容" />
@@ -13,7 +15,7 @@
     <property name="DialogueContent" type="string" size="1024" cname="对话内容" desc="对话内容" />
     <property name="JumpDialogueID" type="uint16" cname="跳转对话ID" desc="跳转对话ID" />
     <property name="IsOptionDialogue" type="uint8" cname="是否包含选项" desc="是否包含选项" />
-    <property name="DialogueOptions" type="ChapterStoryOptionCfg" cname="选项" desc="选项" />
+    <property name="DialogueOptions" type="ChapterStoryOptionCfg" count="CHAPTER_STORY_OPTION_MAX_COUNT" cname="选项" desc="选项" />
     <property name="IsEnd" type="uint8" cname="对话结束" desc="对话结束" />
   </struct>
 

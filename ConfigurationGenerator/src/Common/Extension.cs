@@ -6,5 +6,6 @@ namespace ConfigurationGenerator
 {
     public static class Extension
     {
+
     }
 }

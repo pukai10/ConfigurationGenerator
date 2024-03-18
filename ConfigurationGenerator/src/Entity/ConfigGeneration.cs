@@ -100,9 +100,12 @@ namespace ConfigurationGenerator
 		[XmlAttributionName("meta")]
 		public string MetaFile { get; set; }
 
+        [XmlAttributionName("excel")]
+        public string ExcelName { get; set; }
+
         public override string ToString()
         {
-			return $"\t\t\tName:{Name} SheetName:{SheetName} StructName:{StructName} BinaryFile:{BinaryFile} MetaFile:{MetaFile}";
+			return $"\t\t\tName:{Name} SheetName:{SheetName} StructName:{StructName} BinaryFile:{BinaryFile} MetaFile:{MetaFile} ExcelName:{ExcelName}";
         }
     }
 }

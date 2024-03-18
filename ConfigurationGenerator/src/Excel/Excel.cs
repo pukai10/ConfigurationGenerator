@@ -47,6 +47,8 @@ namespace ConfigurationGenerator
 				case ".xlsx":
                     workbook = new XSSFWorkbook(fs);
 					break;
+				default:
+					return;
 			}
 
 			fs.Close();

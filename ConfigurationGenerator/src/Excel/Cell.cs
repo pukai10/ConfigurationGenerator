@@ -28,8 +28,8 @@ namespace ConfigurationGenerator
 		{
 			m_rowIndex = rowIndex;
 			m_columnIndex = columnIndex;
-			m_cellType = cell.GetCellType(cell != null ? cell.CellType : CellType.Unknown);
-			m_cellValue = cell.GetCellValue(cell != null ? cell.CellType : CellType.Unknown);
+			m_cellType = cell == null ? ECellType.String : cell.GetCellType(cell.CellType);
+			m_cellValue = cell == null ? "" : cell.GetCellValue(cell.CellType);
 
 			//有效的单元格，如果表里配置的是空字符串时，对于Number和Boolean类型需要转成默认值
 			if(IsVaild && string.IsNullOrEmpty(m_cellValue)) 

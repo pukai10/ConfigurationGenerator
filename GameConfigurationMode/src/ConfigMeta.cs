@@ -17,6 +17,9 @@ namespace GameConfigurationMode
 		[XmlAttributionName("version")]
 		public string Version { get; set; }
 
+		[XmlChildNodeList("constant",typeof(ConfigConst))]
+		public List<ConfigConst> Constants { get; set; }
+
 		[XmlChildNodeList("struct",typeof(ConfigStruct))]
 		public List<ConfigStruct> Structs { get; set; }
 
@@ -29,18 +32,30 @@ namespace GameConfigurationMode
 					return null;
 				}
 
-				for (int i = 0; i < Structs.Count; i++)
-				{
-					var str = Structs[i];
-					if (str != null && str.Name == structName)
-					{
-						return str;
-					}
-				}
-
-				return null;
+				return Structs.Find((item) => { return item.Name == structName; });
 			}
 
+		}
+
+		public int GetConstValue(string name)
+		{
+			int value = -1;
+			if (string.IsNullOrEmpty(name))
+			{
+				return -1;
+			}
+
+			if(int.TryParse(name,out value))
+			{
+				return value;
+			}
+
+			if(Constants != null)
+			{
+				return Constants.Find((item) => item.Name == name).Value;
+			}
+
+			return -1;
 		}
 
 		public override string ToString()
@@ -53,6 +68,15 @@ namespace GameConfigurationMode
 			}
 			return sb.ToString();
 		}
+	}
+
+	[XmlNodeName("constant",typeof(ConfigConst))]
+	public class ConfigConst
+	{
+		[XmlAttributionName("name")]
+		public string Name { get; set; }
+        [XmlAttributionName("value")]
+        public int Value { get; set; }
 	}
 
 
@@ -112,10 +136,10 @@ namespace GameConfigurationMode
 		public string PropertyType { get; set; }
 
 		[XmlAttributionName("size")]
-		public int Size { get; set; }
+		public string Size { get; set; }
 
 		[XmlAttributionName("count")]
-		public int Count { get; set; }
+		public string Count { get; set; }
 
 		[XmlAttributionName("cname")]
 		public string CName { get; set; }

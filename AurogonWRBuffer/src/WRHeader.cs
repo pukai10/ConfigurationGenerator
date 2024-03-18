@@ -11,6 +11,13 @@ namespace AurogonWRBuffer
 		private int m_count = 0;
 		public int Count => m_count;
 
+        public WRHeader(int size, int count)
+        {
+            m_size = size + 8;
+            m_count = count;
+        }
+
+
         public WRErrorType Pack(ref WriteBuffer writer)
         {
             if(writer == null)

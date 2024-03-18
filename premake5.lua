@@ -187,6 +187,7 @@ project "ConfigurationGenerator"
         "AurogonTools",
         "AurogonXmlConvert",
         "GameConfigurationMode",
+        "AurogonWRBuffer",
         "System.Xml"
     }
 

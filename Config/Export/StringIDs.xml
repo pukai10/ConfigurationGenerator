@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<root>
+  <StringIDInfo key="1" length="6" data="刘备" />
+  <StringIDInfo key="2" length="12" data="刘备简介" />
+  <StringIDInfo key="3" length="6" data="关羽" />
+  <StringIDInfo key="4" length="12" data="关羽简介" />
+  <StringIDInfo key="5" length="6" data="张飞" />
+  <StringIDInfo key="6" length="12" data="张飞简介" />
+  <StringIDInfo key="7" length="15" data="开始对话了" />
+  <StringIDInfo key="8" length="0" data="" />
+  <StringIDInfo key="9" length="18" data="好吧，开始吧" />
+  <StringIDInfo key="10" length="18" data="你叫什么名字" />
+  <StringIDInfo key="11" length="24" data="我叫关羽，你呢？" />
+  <StringIDInfo key="12" length="33" data="我叫刘备。你喜欢什么呢" />
+  <StringIDInfo key="13" length="6" data="武术" />
+  <StringIDInfo key="14" length="6" data="美食" />
+  <StringIDInfo key="15" length="54" data="我喜欢武术，使用青龙偃月刀。那你呢？" />
+  <StringIDInfo key="16" length="6" data="书法" />
+  <StringIDInfo key="17" length="48" data="我喜欢美食，比如红烧肉。那你呢？" />
+  <StringIDInfo key="18" length="54" data="我喜欢武术，使用双股剑。我们结拜吧。" />
+  <StringIDInfo key="19" length="6" data="结拜" />
+  <StringIDInfo key="20" length="9" data="不结拜" />
+  <StringIDInfo key="21" length="57" data="我喜欢美食，比如土豆丝，那我们结拜吧。" />
+  <StringIDInfo key="22" length="39" data="我喜欢书法，那我们结拜吧。" />
+  <StringIDInfo key="23" length="36" data="好啊。我们去桃园结义吧。" />
+  <StringIDInfo key="24" length="30" data="别呀，我们还是结拜吧" />
+  <StringIDInfo key="25" length="19" data="好的，Lets Go！" />
+</root>

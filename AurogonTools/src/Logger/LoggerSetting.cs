@@ -10,7 +10,12 @@ namespace AurogonTools
         public LoggerSetting()
         {
             logType = LogType.All;
-            logPath = AppDomain.CurrentDomain.BaseDirectory;
+            logPath = AppDomain.CurrentDomain.BaseDirectory + "log";
+
+            if(System.IO.Directory.Exists(logPath) == false)
+            {
+                System.IO.Directory.CreateDirectory(logPath);
+            }
             logFileEnabled = false;
         }
     }
