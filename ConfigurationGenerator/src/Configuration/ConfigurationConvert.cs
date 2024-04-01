@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using AurogonXmlConvert;
 using AurogonTools;
@@ -8,8 +7,7 @@ using System.IO;
 using GameConfigurationMode;
 using AurogonWRBuffer;
 using System.Xml;
-using NPOI.POIFS.Crypt.Dsig;
-using Org.BouncyCastle.Asn1.Cms;
+using AurogonExcel;
 
 namespace ConfigurationGenerator
 {
@@ -24,7 +22,7 @@ namespace ConfigurationGenerator
         private Dictionary<string, ExcelReader> m_excelReaders = null;
         private Dictionary<string, ConfigMeta> m_metaDict = null;
         private List<ExcelSheetNode> m_needExportExcelList = null;
-        private Dictionary<string, ClassInfo> m_classInfoDict = null;
+        private Dictionary<string, BaseClassInfo> m_classInfoDict = null;
         private List<string> m_stringList = null;
 
         public ConfigurationConvert(ConfigurationSetting setting)
@@ -74,19 +72,19 @@ namespace ConfigurationGenerator
 
         private void InitClassInfoDict()
         {
-            m_classInfoDict = new Dictionary<string, ClassInfo>();
-            m_classInfoDict.Add("byte", new ClassInfo("byte", 1, new List<string>() { "uint8","Byte" }));
-            m_classInfoDict.Add("sbyte", new ClassInfo("sbyte", 1, new List<string>() { "int8" ,"SByte"}));
-            m_classInfoDict.Add("ushort", new ClassInfo("ushort", 2, new List<string>() { "uint16", "UInt16" }));
-            m_classInfoDict.Add("short", new ClassInfo("short", 2, new List<string>() { "int16", "Int16" }));
-            m_classInfoDict.Add("uint", new ClassInfo("uint", 4, new List<string>() { "uint32" , "UInt32" }));
-            m_classInfoDict.Add("int", new ClassInfo("int", 4, new List<string>() { "int32", "Int32" }));
-            m_classInfoDict.Add("ulong", new ClassInfo("ulong", 8, new List<string>() { "uint64", "UInt64" }));
-            m_classInfoDict.Add("long", new ClassInfo("long", 8, new List<string>() { "int64", "Int64" }));
-            m_classInfoDict.Add("float", new ClassInfo("float", 4, null, false));
-            m_classInfoDict.Add("double", new ClassInfo("double", 8, new List<string>() { "Double" }, false));
-            m_classInfoDict.Add("bool", new ClassInfo("bool", 1, new List<string>() { "boolean" , "Boolean" }, false));
-            m_classInfoDict.Add("string", new ClassInfo("string", 4, new List<string>() { "String"}, false));
+            m_classInfoDict = new Dictionary<string, BaseClassInfo>();
+            m_classInfoDict.Add("byte", new BaseClassInfo("byte", 1, new List<string>() { "uint8","Byte" }, "0"));
+            m_classInfoDict.Add("sbyte", new BaseClassInfo("sbyte", 1, new List<string>() { "int8" ,"SByte"}, "0"));
+            m_classInfoDict.Add("ushort", new BaseClassInfo("ushort", 2, new List<string>() { "uint16", "UInt16" }, "0"));
+            m_classInfoDict.Add("short", new BaseClassInfo("short", 2, new List<string>() { "int16", "Int16" }, "0"));
+            m_classInfoDict.Add("uint", new BaseClassInfo("uint", 4, new List<string>() { "uint32" , "UInt32" }, "0"));
+            m_classInfoDict.Add("int", new BaseClassInfo("int", 4, new List<string>() { "int32", "Int32" }, "0"));
+            m_classInfoDict.Add("ulong", new BaseClassInfo("ulong", 8, new List<string>() { "uint64", "UInt64" }, "0"));
+            m_classInfoDict.Add("long", new BaseClassInfo("long", 8, new List<string>() { "int64", "Int64" }, "0"));
+            m_classInfoDict.Add("float", new BaseClassInfo("float", 4, null, false, "0"));
+            m_classInfoDict.Add("double", new BaseClassInfo("double", 8, new List<string>() { "Double" }, false, "0"));
+            m_classInfoDict.Add("bool", new BaseClassInfo("bool", 1, new List<string>() { "boolean" , "Boolean" }, false, "false"));
+            m_classInfoDict.Add("string", new BaseClassInfo("string", 4, new List<string>() { "String"}, false, "0"));
         }
 
         public bool Convert()
@@ -122,7 +120,7 @@ namespace ConfigurationGenerator
 
         private void ExportExcel()
         {
-            Dictionary<string, List<ExportGameConfigRowInfo>> allExcelRowInfo = new Dictionary<string, List<ExportGameConfigRowInfo>>();
+            Dictionary<string, List<ExportExcelRowInfo>> allExcelRowInfo = new Dictionary<string, List<ExportExcelRowInfo>>();
             foreach (var excelSheet in m_needExportExcelList)
             {
                 ExcelReader reader = m_excelReaders[excelSheet.ExcelName];
@@ -131,7 +129,7 @@ namespace ConfigurationGenerator
                 var structNode = meta[excelSheet.StructName];
                 var firstRow = sheet[0];
 
-                List<ExportGameConfigRowInfo> rowInfoList = new List<ExportGameConfigRowInfo>();
+                List<ExportExcelRowInfo> rowInfoList = new List<ExportExcelRowInfo>();
                 ConvertExportRowInfo(firstRow, structNode,meta,"",ref rowInfoList);
 
                 if(allExcelRowInfo.ContainsKey(excelSheet.SheetName) == false)
@@ -307,7 +305,7 @@ namespace ConfigurationGenerator
             Debug("导出stringid bin成功，flie:" + exportStringIDBinFile);
         }
 
-        private void ConvertExportRowInfo(Cell[] firstRow, ConfigStruct configStruct, ConfigMeta meta,string prefixName,ref List<ExportGameConfigRowInfo> rowInfoList)
+        private void ConvertExportRowInfo(Cell[] firstRow, ConfigStruct configStruct, ConfigMeta meta,string prefixName,ref List<ExportExcelRowInfo> rowInfoList)
         {
 
             Func<string, Cell> findCell = (name) =>
@@ -347,7 +345,7 @@ namespace ConfigurationGenerator
                     {
                         for (int i = 0; i < count; i++)
                         {
-                            ExportGameConfigRowInfo info = new ExportGameConfigRowInfo();
+                            ExportExcelRowInfo info = new ExportExcelRowInfo();
                             info.Description = property.Desc;
                             info.Type = property.PropertyType;
                             info.TitleName = $"{prefixName}{property.CName}{(i + 1)}";
@@ -366,7 +364,7 @@ namespace ConfigurationGenerator
                     }
                     else
                     {
-                        ExportGameConfigRowInfo info = new ExportGameConfigRowInfo();
+                        ExportExcelRowInfo info = new ExportExcelRowInfo();
                         info.Description = property.Desc;
                         info.Type = property.PropertyType;
                         info.TitleName = $"{prefixName}{property.CName}";
@@ -641,7 +639,7 @@ namespace ConfigurationGenerator
             return string.Empty;
         }
 
-        public ClassInfo GetClassInfo(string typeName)
+        public BaseClassInfo GetClassInfo(string typeName)
         {
             foreach(var classInfo in m_classInfoDict.Values)
             {

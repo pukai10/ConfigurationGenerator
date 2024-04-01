@@ -102,6 +102,28 @@ project "AurogonWRBuffer"
         "AurogonTools"
     }
 
+project "AurogonExcel"
+    location "AurogonExcel"
+    language "C#"
+    kind "SharedLib"
+    
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files 
+    {
+        "AurogonExcel/src/**.cs"
+    }
+
+    nuget 
+    {
+        "NPOI:2.6.2"
+    }
+
+    links
+    {
+    }
+
 project "AurogonCodeGenerator"
     location "AurogonCodeGenerator"
     language "C#"

@@ -1,10 +1,6 @@
 using System;
 using CommandLineOption;
 using AurogonTools;
-using AurogonXmlConvert;
-using System.IO;
-using System.Collections.Generic;
-using GameConfigurationMode;
 
 namespace ConfigurationGenerator
 {

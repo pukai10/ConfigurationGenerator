@@ -30,7 +30,7 @@ namespace AurogonTools
         }
 
 
-        private AurogonSingletonBase() { }
+        protected AurogonSingletonBase() { }
 
         public virtual void OnInit() { }
 

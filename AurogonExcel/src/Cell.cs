@@ -1,7 +1,6 @@
-﻿using System;
-using NPOI.SS.UserModel;
+﻿using NPOI.SS.UserModel;
 
-namespace ConfigurationGenerator
+namespace AurogonExcel
 {
 	/// <summary>
 	/// 单元格
@@ -57,4 +56,3 @@ namespace ConfigurationGenerator
 		Null,
     }
 }
-

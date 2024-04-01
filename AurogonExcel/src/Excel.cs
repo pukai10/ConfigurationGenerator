@@ -6,7 +6,7 @@ using NPOI.XSSF.UserModel;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConfigurationGenerator
+namespace AurogonExcel
 {
 	public class ExcelReader
 	{

@@ -1,7 +1,6 @@
-﻿using System;
-using NPOI.SS.UserModel;
+﻿using NPOI.SS.UserModel;
 
-namespace ConfigurationGenerator
+namespace AurogonExcel
 {
 	public static class ExcelExtension
 	{
